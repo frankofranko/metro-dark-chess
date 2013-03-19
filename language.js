@@ -28,7 +28,7 @@ var EN = 2;
 var JA = 3;
 var KO = 4;
 
-var gLanguageIndex = 2; // 目前預設語言
+var gLanguageIndex = 0; // 目前預設語言
 
 var GAME_NAME = new Array( "地鐵暗棋", "地铁暗棋", "Metro Darkchess", "地下鉄チェス", "지하철체스" );
 
