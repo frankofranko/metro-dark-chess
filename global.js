@@ -36,7 +36,7 @@ var IOS = 3;
 var BLACK_BERRY = 4;
 var CHROME = 5;
 
-var gDeviceName = SIM_DEVICE; // 設備名稱
+var gDeviceName = CHROME; // 設備名稱
 
 
 //

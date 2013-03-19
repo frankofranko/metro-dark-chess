@@ -203,40 +203,22 @@ function jumpMove( page, index )
     
     if ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE )
     {
-        //alert( index + "." + gJumpProportion );
-        if ( index == backIndex )   // 已經滾到最後面
+        var relativeIndex = index + offset;
+    
+        if ( -offset == indexLength-2 )   // 已經滾到最後面
         {
             document.body.style.margin = "0% 0% 0% 0%";
             showPage( START_PAGE );
         }
         else
         {
-            var relativeIndex = index + offset;
-            
-            if ( relativeIndex == 0 )
-            {
-                if ( offset < 0 )
-                {
-                    gJumpProportion += 50; // 往前平移
-                }
-            }
-            else
-            {
-                if ( offset > ( -indexLength + 1 ) )
-                {
-                    gJumpProportion -= 50; // 往後平移
-                }
-                else
-                {
-                
-                }
-            }
-
+            gJumpProportion -= 50;
+        
             if ( getOrientation() == PORTRAIT ) // 直立
             {
                 document.body.style.margin = gJumpProportion + "% 0% 0% 0%"; // 往上移
             }
-            else // 橫放
+            else
             {
                 document.body.style.margin = "0% 0% 0% " + gJumpProportion + "%"; // 往左移
             }
@@ -358,7 +340,7 @@ function aiTurn( ai, camp )
 
             if ( enableAudio == YES_LOGO && ON_DEVICE )
             {
-				if ( gDeviceName == SIM_DEVICE )
+				if ( gDeviceName == SIM_DEVICE || gDeviceName == CHROME )
 				{
 					
 				}
@@ -911,8 +893,11 @@ function showPage( page )
 
             if ( deviceHeight > deviceWidth ) // 直立
             {
-            
-				if ( gDeviceName == WINDOWS_PHONE )
+                if ( gDeviceName == CHROME )
+                {
+                    deviceHeight *= 0.8; 
+                }
+				else if ( gDeviceName == WINDOWS_PHONE )
                 {
 					deviceHeight *= 1.05; // 棋盤高度增大5%
 					document.body.style.margin = "5% 0% 0% 0%"; // 棋盤往下移
@@ -983,7 +968,11 @@ function showPage( page )
             }
             else // 橫放
             {
-                if ( gDeviceName == WINDOWS_PHONE )
+                if ( gDeviceName == CHROME )
+                {
+                    deviceWidth *= 0.8; 
+                }
+                else if ( gDeviceName == WINDOWS_PHONE )
                 {
                     //deviceHeight *= 1.1; // 棋盤高度縮小5%
                     deviceWidth *= 0.95; // 棋盤寬度縮小5%
@@ -1093,19 +1082,6 @@ function showPage( page )
 
 }
 
-// 檢查此設備是否有支援離開功能
-function deviceWithQuit()
-{
-    if ( gDeviceName == WINDOWS_PHONE || gDeviceName == CHROME )
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-
-}
 
 
 
@@ -1120,7 +1096,8 @@ function startGame()
 
 		if ( !ON_DEVICE || 
              gDeviceName == SIM_DEVICE ||
-             gDeviceName == IOS )
+             gDeviceName == IOS ||
+             gDeviceName == CHROME )
 		{
 			//setSystemColor( "green", "black" );
 			//setDefaultLanguage( "TW" );
