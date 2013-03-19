@@ -831,11 +831,11 @@ function drawColor( index )
     var posX = pos[0];
     var posY = pos[1];
 
-    if ( index < 2 )   // 前兩個黑色
+    if ( index < 1 )   // 前兩個黑色
     {
         ctx.fillStyle = "#000000";
     }
-    else if ( index > ( colors.length - 3 ) )   // 最後兩個白色
+    else if ( index > ( colors.length - 2 ) )   // 最後兩個白色
     {
         ctx.fillStyle = "#FFFFFF";
     }
