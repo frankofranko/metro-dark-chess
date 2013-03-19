@@ -128,11 +128,11 @@ var STR_ABOUT_PROJECT_DETAIL = new Array(
     "チーゲームコルドバ+ HTML5ベースの開発。",
     "치 게임 Cordova + HTML5 기반의 개발." );
 var STR_ABOUT_DISTRIBUTION_DETAIL = new Array(
-    "雖然這是一項很粗淺的作品，但未來仍將以GPL授權協議公開原始碼，供如我這般的初學者參考與借鑑。",
-    "虽然这是一项很粗浅的作品，但未来仍将以GPL授权协议公开原始码，供如我这般的初学者参考与借鉴。",
-    "Although this is a very superficial works, but the future will continue to GPL licensing agreement open source for beginners like me so reference and experience.",
-    "これは非常に表面的な作品ですが、将来的には私のような初心者のためのオープンソースのための基準や経験GPLのライセンス契約をしていきます。ものの",
-    "이 매우 피상적 작품이지만, 참조 및 경험 수 있도록 미래는 나 같은 초보자를위한 GPL 라이센스 계약을 오픈 소스로 계속하지만." );
+    "以GPL授權協議公開原始碼，託管於Google Code(https://code.google.com/p/metro-dark-chess)。此番野人獻曝，僅供如我這般的初學者參考與借鑑。",
+    "以GPL授权协议公开原始码，托管于Google Code(https://code.google.com/p/metro-dark-chess)。此番野人献曝，仅供如我这般的初学者参考与借鉴。",
+    "Open source GPL licensing agreement, hosted on Google Code(https://code.google.com/p/metro-dark-chess). Savage Sincere reference purposes only, such as I do so beginners and Reference.",
+    "Google CodeでホストされているオープンソースのGPLライセンス契約(https://code.google.com/p/metro-dark-chess)。 サベージ誠実な参照を目的としてのみ、私は初心者および解説を行うなど。",
+    "Google 코드에서 호스팅되는 오픈 소스 GPL 라이센스 계약(https://code.google.com/p/metro-dark-chess).세비지 성실한 참조 목적으로 만, 정말 초보자와 참조를 같은." );
 var STR_ABOUT_SUPPORT_DETAIL = new Array(
     "關於贊助",
     "关于赞助",
@@ -140,8 +140,8 @@ var STR_ABOUT_SUPPORT_DETAIL = new Array(
     "スポンサーシップ",
     "후원에 대하여" );
 var STR_ABOUT_AUTHOR_DETAIL = new Array(
-    "籍貫台灣彰化，菜鳥工程師一枚，所學尚淺，歡迎來信交流與指教。　信箱：abc9070410@gmail.com",
-    "籍贯台湾彰化，菜鸟工程师一枚，所学尚浅，欢迎来信交流与指教。　信箱：abc9070410@gmail.com",
+    "籍貫台灣彰化，菜鳥工程師一枚，所學尚淺，歡迎來信交流與指教。　信箱: abc9070410@gmail.com",
+    "籍贯台湾彰化，菜鸟工程师一枚，所学尚浅，欢迎来信交流与指教。　信箱: abc9070410@gmail.com",
     "Hometown Changhua, Taiwan, rookie engineers a learned yet, please email exchanges with advice. 　e-mail:abc9070410@gmail.com",
     "故郷彰化、台湾、新人エンジニアはまだ習って、アドバイスされた電子メールの交換をしてください. 　e-mail:abc9070410@gmail.com",
     "고향 Changhua, 대만, 신참 엔지니어가 아직 배우고, 조언 이메일 교류를하시기 바랍니다. 　e-mail:abc9070410@gmail.com" );
