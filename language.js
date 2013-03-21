@@ -128,8 +128,8 @@ var STR_ABOUT_PROJECT_DETAIL = new Array(
     "チーゲームコルドバ+ HTML5ベースの開発。",
     "치 게임 Cordova + HTML5 기반의 개발." );
 var STR_ABOUT_DISTRIBUTION_DETAIL = new Array(
-    "以GPL授權協議公開原始碼，託管於Google Code(https://code.google.com/p/metro-dark-chess)。此番野人獻曝，僅供如我這般的初學者參考與借鑑。",
-    "以GPL授权协议公开原始码，托管于Google Code(https://code.google.com/p/metro-dark-chess)。此番野人献曝，仅供如我这般的初学者参考与借鉴。",
+    "以GPL授權協議公開原始碼，託管於Google Code(https://code.google.com/p/metro-dark-chess)，野人獻曝，供如我這般的初學者參考與借鑑。",
+    "以GPL授权协议公开原始码，托管于Google Code(https://code.google.com/p/metro-dark-chess)，野人献曝，供如我这般的初学者参考与借鉴。",
     "Open source GPL licensing agreement, hosted on Google Code(https://code.google.com/p/metro-dark-chess). Savage Sincere reference purposes only, such as I do so beginners and Reference.",
     "Google CodeでホストされているオープンソースのGPLライセンス契約(https://code.google.com/p/metro-dark-chess)。 サベージ誠実な参照を目的としてのみ、私は初心者および解説を行うなど。",
     "Google 코드에서 호스팅되는 오픈 소스 GPL 라이센스 계약(https://code.google.com/p/metro-dark-chess).세비지 성실한 참조 목적으로 만, 정말 초보자와 참조를 같은." );
