@@ -17,69 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-// priority policy
-/*
-
-1. eatFirst :
-soldier eat general, cannon eat Minister or higher ( including cannon )
-2. escapeFirst :
-Minister or higher will be eaten
-3. safeEat :
-no dangerous
-3. openToEat :
-for cannon or duke
-4. safeOpen :
-open chess no close to our army
-5. walk :
-6. dangerousOpen :
-open chess close to our horse or less ( including general )
-7. dangerousEat :
-    will be eaten after eating recently
-8. dangerousMove :
-    will be eaten after moving recently
-
-// new
-defensiveOpen :
-  open for protection
-ex.
-
-defensiveMove :
-
-
-1. [OK] walk to eat 呼叫 normal eat
-2. normal eat 和 noraml escape 的 chess priorirty問題
-3. defensive open & Move
-3. invasive open & move
-4. WalkToEat 要和 open to eat 權值分等級
-5. WalkToEat 須回傳希望吃到的棋子權值
-6. 不能一直追著要吃
-7. 分類: coercive open
-        1.  有被炮跳吃危險的棋子旁邊翻開（希望翻出己方大於炮的棋子作為威嚇）
-        2. 有被吃危險的棋子(相以上)旁邊間隔翻開（希望翻出己方炮作為威嚇）
-8. normalEat增加欲吃棋子是否下一步就能吃我方，若是則比較該我方棋子之權值
-9. 實現雙機模式 ( 按一下暫停 再按一下恢復 )
-10. noDangerous
-11. 當被吃和可吃的機會同時存在，需比較本身和可吃棋子的權值，高者優先。
-12. coercive open & move .
-13. escape之後有可能導致己方price更大的棋子被吃, 需避免。
-14. walk之後被吃，但再下一回合我方也可反吃，此時需比較雙方被吃的price加總
-15. 侵略性行走：目前可走到的位置存在可吃的棋子，則往該處的方向前進。
-16. 發現有被敵方A吃的可能，可嘗試吃A來化解危機。
-
-17. 增加用吃對方來逃脫的可能性
-18. open to eat 要注意是否會讓己方棋子危險 ( 翻開是 兵 車 炮 會不會吃到自己）
-
-19. some chesses can not move, or else neighbor chesses will be eaten .
-
-20.
-
-*/
-
 "use strict";
-
-
-
-
 
 
 // 設置測試數據
