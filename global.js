@@ -35,6 +35,7 @@ var ANDROID = 2;
 var IOS = 3;
 var BLACK_BERRY = 4;
 var CHROME = 5;
+var FIREFOX = 6;
 
 var gDeviceName = CHROME; // 設備名稱
 

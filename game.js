@@ -340,11 +340,14 @@ function aiTurn( ai, camp )
 
             if ( enableAudio == YES_LOGO && ON_DEVICE )
             {
-				if ( gDeviceName == SIM_DEVICE || gDeviceName == CHROME )
+            	if ( gDeviceName == CHROME ||
+         			gDeviceName == FIREFOX ||
+         			gDeviceName == SIM_DEVICE ||
+         			!ON_DEVICE )
 				{
-					
+					playClickAudio();
 				}
-				else if ( gDeviceName == WINDOWS_PHONE )
+				if ( gDeviceName == WINDOWS_PHONE )
 				{
 					playBeep(); // 若有開啟音效, 則播放逼聲
 				}
@@ -558,6 +561,12 @@ function storeState( page )
 
 }
 
+// 播放click.wav
+function playClickAudio()
+{
+	document.getElementById('clickAudio').play();
+
+}
 
 
 // 在遊戲頁面時點擊的操作
@@ -570,6 +579,25 @@ function clickGamePage( index )
         switchDemoState(); // 改變演示狀態: 執行 or 暫停
         return;
     }
+    
+    if ( enableAudio == YES_LOGO && ON_DEVICE )
+    {
+        if ( gDeviceName == CHROME ||
+             gDeviceName == FIREFOX ||
+             gDeviceName == SIM_DEVICE ||
+             !ON_DEVICE )
+	    {
+		    playClickAudio();
+	    }
+        if ( gDeviceName == WINDOWS_PHONE )
+	    {
+		    playBeep(); // 若有開啟音效, 則播放逼聲
+	    }
+	    else
+	    {
+		    playAudio( getPhoneGapPath() + "click.wav" );
+		}
+	}
 
     var ai = ( getNowPage() == LOW_GAME_PAGE ) ? LOW_AI : MED_AI;
 
@@ -762,21 +790,14 @@ function getScrollLength()
 }
 
 
-// 初始化動作
+// 初始化動作，啓動程式時呼叫
 function init()
 {
 	if ( ON_DEVICE )
 	{
 		document.addEventListener( "deviceready", onDeviceReady, false );
 		document.addEventListener( "resume", onResume, false );
-        
-        if ( gDeviceName == IOS )
-        {
-            document.addEventListener( "orientationchange", orientationChange, false );
-        }
 	}
-    //c.addEventListener( "touchstart", touchStart, false );
-
 }
 
 // 改寫預設按上一頁的行為
@@ -797,7 +818,7 @@ function onBackKeyDown()
 	
 }
 
-var gLocaleName;
+var gLocaleName; // 取得的區域名稱
 
 function onDeviceReady()
 {
@@ -818,16 +839,14 @@ function onDeviceReady()
 	}
     
     if ( gDeviceName == ANDROID || 
-         gDeviceName == IOS ||
          gDeviceName == BLACK_BERRY )
 	{
 		navigator.globalization.getLocaleName(
             function (locale) {gLocaleName = locale.value;},
             function () {alert('Error getting locale\n');}
         );
-	
-	    setDefaultLanguage( gLocaleName );
-		
+        
+	    setDefaultLanguage( gLocaleName ); // 以區域名稱來設置語言
 	}
     
     showPage( START_PAGE );
@@ -846,10 +865,6 @@ function initGame()
 
     setTestChessData();
 }
-
-// IOS:
-// 768x1004 -> 1024x748
-// 1024x748 -> 1024x1339
 
 // 開始頁面
 function showPage( page )
@@ -911,10 +926,6 @@ function showPage( page )
                         deviceHeight = gInitHeight;
                         deviceWidth = gInitWidth;
                     }
-                    //deviceHeight = height;
-                    //deviceWidth = width;
-                    
-                    //alert( "H>W:" + height + "," + width + "__" + deviceWidth + "," + deviceHeight );
                     
                 }
                 
@@ -981,13 +992,6 @@ function showPage( page )
                 else if ( gDeviceName == IOS )
                 {
                     document.body.style.margin = "5% 0% 0% 0%"; // 棋盤往下移
-                    
-                    if ( gInitHeight != null && gInitWidth != null )
-                    {
-                        //deviceHeight = gInitHeight;
-                        //deviceWidth = gInitWidth;
-                    }
-                    //alert( "W>H:" + height + "," + width + "__" + deviceWidth + "," + deviceHeight );
                 }
 
                 if ( page == RULE_PAGE )
@@ -1096,8 +1100,8 @@ function startGame()
 
 		if ( !ON_DEVICE || 
              gDeviceName == SIM_DEVICE ||
-             gDeviceName == IOS ||
-             gDeviceName == CHROME )
+             gDeviceName == CHROME ||
+             gDeviceName == FIREFOX )
 		{
 			//setSystemColor( "green", "black" );
 			//setDefaultLanguage( "TW" );

@@ -707,29 +707,34 @@ function playBeep()
 //
 function playAudio( url )
 {
-    
-    // Play the audio file at url
-    var my_media = new Media( url,
+    if ( gDeviceName == CHROME || gDeviceName == FIREFOX )
+    {
+    	
+    }
+    else
+    {
+    	// Play the audio file at url
+    	var my_media = new Media( url,
                               // success callback
                               function()
-    {
-        console.log( "playAudio():Audio Success" );
-    },
-    // error callback
-    function( err )
-    {
-        console.log( "playAudio():Audio Error: " + err );
-    } );
+    	{
+        	console.log( "playAudio():Audio Success" );
+    	},
+    	// error callback
+    	function( err )
+    	{
+        	console.log( "playAudio():Audio Error: " + err );
+    	} );
 
-    alert( url );
+    	alert( url );
     
-    // Play audio
-    my_media.play();
-    
-    
+    	// Play audio
+    	my_media.play();
 
-    //my_media.stop();
-    my_media.release();
+    	//my_media.stop();
+    	//my_media.release();
+    
+    }
 }
 
 // 從背景執行中回復
@@ -973,43 +978,48 @@ function setBackgroundSize()
 
 }
 
+function test()
+{
+    
+    alert( "test" );
+}
+
 // 設置預設語言
 function setDefaultLanguage( language )
 {
     if ( ON_DEVICE ) // 實機
     {
         if ( language.toUpperCase().match( "TW" ) ||
-             language.toUpperCase().match( "HK" ) )
+            language.toUpperCase().match( "HK" ) ) 
         {
-            gLanguageIndex = ZH;
+            gLanguageIndex = ZH; // 繁體中文
         }
         else if ( language.toUpperCase().match( "CN" ) )
         {
-            gLanguageIndex = CN;
+            gLanguageIndex = CN; // 簡體中文
         }
         else if ( language.toUpperCase().match( "EN" ) )
         {
-            gLanguageIndex = EN;
+            gLanguageIndex = EN; // 英文
         }
-        else if ( language.toUpperCase().match( "JA" ) )
+        else if ( language.toUpperCase().match( "JA" ) ||
+                  language.toUpperCase().match( "JP" ) )
         {
-            gLanguageIndex = JA;
+            gLanguageIndex = JA; // 日文
         }
         else if ( language.toUpperCase().match( "KO" ) )
         {
-            gLanguageIndex = KO;
+            gLanguageIndex = KO; // 韓文
         }
         else
         {
-            gLanguageIndex = EN; // 預設語言
+            gLanguageIndex = EN; // 實機的預設語言
         }
     }
     else // 非實機
     {
-        gLanguageIndex = TW;
+        gLanguageIndex = TW; // 非實機的預設語言
     }
-
-    //gLanguageIndex = EN;
 }
 
 // 設置系統顏色
