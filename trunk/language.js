@@ -78,10 +78,10 @@ var STR_ABOUT = new Array( "關於程式", "关于程式", "About", "作品に�
 var STR_QUIT = new Array( "離開遊戲", "离开游戏", "Quit", "終わり", "끝" );
 var STR_LOG = new Array( "對戰記錄", "对战历史", "Game Log", "ゲーム記録", "게임 기록" );
 
-var STR_RESTART = new Array( "再下一盤", "再下一盘", "Restart", "もう一度再生する", "다시 재생" );
+var STR_RESTART = new Array( "再下一盤", "再下一盘", "Restart", "もう再生する", "다시 재생" );
 var STR_BLACK = new Array( "黑", "黑", "Black", "黒", "검은" );
 var STR_RED = new Array( "紅", "红", "Red", "赤", "붉은" );
-var STR_WIN = new Array( "勝", "胜", "Win", "優勝", "승리" );
+var STR_WIN = new Array( "勝", "胜", "Win", "勝", "승리" );
 var STR_LOSE = new Array( "負", "负", "Lose", "負", "음수" );
 var STR_PLAYER_FIRST = new Array( "玩家先手", "玩家先手", "Player First", "選手の優先", "선수 첫번째" );
 var STR_AI_FIRST = new Array( "電腦先手", "电脑先手", "AI First", "AIの優先", "컴퓨터 첫번째" );

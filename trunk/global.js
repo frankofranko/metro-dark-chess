@@ -37,7 +37,7 @@ var BLACK_BERRY = 4;
 var CHROME = 5;
 var FIREFOX = 6;
 
-var gDeviceName = CHROME; // 設備名稱
+var gDeviceName = ANDROID; // 設備名稱
 
 
 //
@@ -531,5 +531,7 @@ var TEMP_PAGE = "gTempStoredPage"; // 暫存的頁面名稱
 var gInitGameState; // 是不是剛開始遊戲
 
 
-var gJumpProportion = 0;
+var gJumpProportion = 0; // 用於Chrome往後捲動頁面
+var gBackupMargin; // 之前位移位置
+
 
