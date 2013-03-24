@@ -131,8 +131,11 @@ function click( posX, posY )
         }
     }
     else if ( getNowPage() == GAME_OVER_PAGE )
-    {
+    {    
         stopAnimation(); // 停止動畫
+        
+        document.body.style.margin = gBackupMargin; // 將之前的位移位置復原回來
+        
         showPage( GAME_OVER_DIALOG_PAGE ); //
     }
     
@@ -280,7 +283,6 @@ document.onmousedown = function( event )
         var x = event.pageX + document.documentElement.scrollLeft;
         var y = event.pageY + document.documentElement.scrollTop;
         mousedown( x, y );
-        
     }
     catch ( err )
     {
@@ -294,11 +296,13 @@ document.ontouchstart = function( event )
 {
     try
     {
-        var touch = event.touches[0];
-        var x = touch.clientX + document.body.scrollLeft;
-        var y = touch.clientY + document.body.scrollTop;
-        mousedown( x, y );
-        
+        if ( ON_DEVICE && gDeviceName == IOS )
+        {
+            var touch = event.touches[0];
+            var x = touch.clientX + document.body.scrollLeft;
+            var y = touch.clientY + document.body.scrollTop;
+            mousedown( x, y );
+        }
     }
     catch ( err )
     {
@@ -338,23 +342,20 @@ function aiTurn( ai, camp )
             var sourceIndex = moves[0];
             var destIndex = moves[1];
 
-            if ( enableAudio == YES_LOGO && ON_DEVICE )
+            if ( enableAudio == YES_LOGO && ON_DEVICE && getNowPage() == TWO_AI_PAGE )
             {
-            	if ( gDeviceName == CHROME ||
-         			gDeviceName == FIREFOX ||
-         			gDeviceName == SIM_DEVICE ||
-         			!ON_DEVICE )
-				{
-					playClickAudio();
-				}
-				if ( gDeviceName == WINDOWS_PHONE )
+                if ( ON_DEVICE && gDeviceName == WINDOWS_PHONE )
 				{
 					playBeep(); // 若有開啟音效, 則播放逼聲
 				}
-				else
-				{
-					playAudio( getPhoneGapPath() + "click.wav" );
-				}
+				else if ( ON_DEVICE && gDeviceName == ANDROID )
+	            {
+	                playAudio( getPhoneGapPath() + "click.wav" );
+	            }
+                else
+	            {
+		            playClickAudio();
+	            }
             }
 
 
@@ -406,6 +407,8 @@ function aiTurn( ai, camp )
 
                 var winner = getCampName( gGameWinner );
                 printGame( winner + "獲勝!  遊戲結束!! " );
+                
+                gBackupMargin = document.body.style.margin; // 將之前的位移位置紀錄起來
 
                 showPage( GAME_OVER_PAGE );
 
@@ -418,6 +421,8 @@ function aiTurn( ai, camp )
 
             var winner = getCampName( gGameWinner );
             printGame( winner + "獲勝!  遊戲結束!! " );
+            
+            gBackupMargin = document.body.style.margin; // 將之前的位移位置紀錄起來
 
             showPage( GAME_OVER_PAGE );
         }
@@ -469,8 +474,6 @@ function restoreState()
             var tempEatenRedQueue = eatenRedQueue.split( "," );
             */
             
-            //alert( chessesStr.split( "," ) );
-           
             
             /*
             gChesses = chessesStr.split( "," );
@@ -509,7 +512,6 @@ function storeState( page )
 
     if ( isGamePage( page ) )
     {
-        //alert( "STORE: " + getItem( "gTempStoredPage" ) );
     
         var chessesStr = "";
         var chessStatesStr = "";
@@ -543,7 +545,6 @@ function storeState( page )
             
         }
         
-        //alert( chessesStr );
         
         /*
         setItem( "gTempChesses", chessesStr );
@@ -554,19 +555,12 @@ function storeState( page )
         setItem( "gTempEatenRedQueue", eatenRedQueueStr );
         */
         
-        //alert( getItem( "gTempChesses" ) );
         
     }
 
 
 }
 
-// 播放click.wav
-function playClickAudio()
-{
-	document.getElementById('clickAudio').play();
-
-}
 
 
 // 在遊戲頁面時點擊的操作
@@ -582,21 +576,18 @@ function clickGamePage( index )
     
     if ( enableAudio == YES_LOGO && ON_DEVICE )
     {
-        if ( gDeviceName == CHROME ||
-             gDeviceName == FIREFOX ||
-             gDeviceName == SIM_DEVICE ||
-             !ON_DEVICE )
-	    {
-		    playClickAudio();
-	    }
-        if ( gDeviceName == WINDOWS_PHONE )
+        if ( ON_DEVICE && gDeviceName == WINDOWS_PHONE )
 	    {
 		    playBeep(); // 若有開啟音效, 則播放逼聲
 	    }
-	    else
+	    else if ( ON_DEVICE && gDeviceName == ANDROID )
 	    {
-		    playAudio( getPhoneGapPath() + "click.wav" );
-		}
+	        playAudio( getPhoneGapPath() + "click.wav" );
+	    }
+        else
+	    {
+		    playClickAudio();
+	    }
 	}
 
     var ai = ( getNowPage() == LOW_GAME_PAGE ) ? LOW_AI : MED_AI;
@@ -874,7 +865,6 @@ function showPage( page )
          // android在改變方向的時後會摧毀目前頁面，因此需要保存當前資訊
         if ( ON_DEVICE && gDeviceName == ANDROID )
         {
-            //alert( "INIT:" + gInitGameState );
             // 剛進入遊戲
             if ( gInitGameState )
             {
@@ -940,7 +930,6 @@ function showPage( page )
                     var w = deviceHeight / 2;
                     var h = w * ABOUT_HEIGHT / ABOUT_WIDTH;
 
-                    //alert( w + " " + h );
                     setSize( w, h, page );
                 }
                 else if ( page == LOG_PAGE )
@@ -948,7 +937,6 @@ function showPage( page )
                     var w = deviceHeight / 2;
                     var h = w * LOG_HEIGHT / LOG_WIDTH;
 
-                    //alert( w + " " + h );
                     setSize( w, h, page );
                 }
                 else if ( page == OPTION_PAGE )

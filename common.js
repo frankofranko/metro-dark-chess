@@ -665,7 +665,6 @@ function orientationChange( e )
         if ( gDeviceName == IOS &&
              gInitWidth != null && gInitHeight != null )
         {
-            //alert( gInitWidth + "," + gInitHeight );
             width = gInitWidth;
             height = gInitHeight;
         }
@@ -696,6 +695,14 @@ function goBack()
 
 }
 
+
+// 播放click.wav
+function playClickAudio()
+{
+	document.getElementById( "clickAudio" ).play(); // 播放clickAudio物件
+
+}
+
 // 播放逼逼聲
 function playBeep()
 {
@@ -707,34 +714,25 @@ function playBeep()
 //
 function playAudio( url )
 {
-    if ( gDeviceName == CHROME || gDeviceName == FIREFOX )
-    {
-    	
-    }
-    else
-    {
-    	// Play the audio file at url
-    	var my_media = new Media( url,
-                              // success callback
-                              function()
-    	{
-        	console.log( "playAudio():Audio Success" );
-    	},
-    	// error callback
-    	function( err )
-    	{
-        	console.log( "playAudio():Audio Error: " + err );
-    	} );
-
-    	alert( url );
     
-    	// Play audio
-    	my_media.play();
+	// Play the audio file at url
+	var my_media = new Media( url,
+                          // success callback
+                          function()
+	{
+    	console.log( "playAudio():Audio Success" );
+	},
+	// error callback
+	function( err )
+	{
+    	console.log( "playAudio():Audio Error: " + err );
+	} );
 
-    	//my_media.stop();
-    	//my_media.release();
-    
-    }
+	// Play audio
+	my_media.play();
+
+	//my_media.stop();
+	//my_media.release();
 }
 
 // 從背景執行中回復
@@ -978,11 +976,6 @@ function setBackgroundSize()
 
 }
 
-function test()
-{
-    
-    alert( "test" );
-}
 
 // 設置預設語言
 function setDefaultLanguage( language )
