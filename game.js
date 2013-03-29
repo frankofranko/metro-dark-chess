@@ -314,6 +314,26 @@ document.ontouchstart = function( event )
     }
 }
 
+// 播放下棋音效
+function playClickSound()
+{
+    if ( enableAudio == YES_LOGO )
+    {
+        if ( ON_DEVICE && gDeviceName == WINDOWS_PHONE )
+		{
+			playBeep(); // 若有開啟音效, 則播放逼聲
+		}
+		else if ( ON_DEVICE && gDeviceName == ANDROID )
+	    {
+            playAudio( getPhoneGapPath() + "click.wav" );
+        }
+        else
+	    {
+            playClickAudio();
+        }
+    }
+}
+
 
 // 執行AI回合
 function aiTurn( ai, camp )
@@ -345,25 +365,12 @@ function aiTurn( ai, camp )
 
             var sourceIndex = moves[0];
             var destIndex = moves[1];
-
-            if ( enableAudio == YES_LOGO && ON_DEVICE && getNowPage() == TWO_AI_PAGE )
+            
+            if ( getNowPage() == TWO_AI_PAGE )
             {
-                if ( ON_DEVICE && gDeviceName == WINDOWS_PHONE )
-				{
-					playBeep(); // 若有開啟音效, 則播放逼聲
-				}
-				else if ( ON_DEVICE && gDeviceName == ANDROID )
-	            {
-	                playAudio( getPhoneGapPath() + "click.wav" );
-	            }
-                else
-	            {
-		            playClickAudio();
-	            }
+                playClickSound();
             }
-
-
-
+            
             if ( sourceIndex < 0 )
             {
                 //printError( "無法行走! " );
@@ -577,22 +584,6 @@ function clickGamePage( index )
         switchDemoState(); // 改變演示狀態: 執行 or 暫停
         return;
     }
-    
-    if ( enableAudio == YES_LOGO && ON_DEVICE )
-    {
-        if ( ON_DEVICE && gDeviceName == WINDOWS_PHONE )
-	    {
-		    playBeep(); // 若有開啟音效, 則播放逼聲
-	    }
-	    else if ( ON_DEVICE && gDeviceName == ANDROID )
-	    {
-	        playAudio( getPhoneGapPath() + "click.wav" );
-	    }
-        else
-	    {
-		    playClickAudio();
-	    }
-	}
 
     var ai = ( getNowPage() == LOW_GAME_PAGE ) ? LOW_AI : MED_AI;
 
@@ -625,7 +616,8 @@ function clickGamePage( index )
         if ( move( chessData, index, getHighlightIndex(), camp ) ||
              eat( chessData, index, getHighlightIndex(), camp ) )
         {
-
+			playClickSound();
+			
             switchPlayer();
             //setTimeout( aiAnimation( getNowPlayer() ), 1000 );
             aiTurn( ai, getNowPlayer() );
@@ -634,8 +626,6 @@ function clickGamePage( index )
             setHighlightIndex( index );
 
             drawSingle( getHighlightIndex() );
-
-
         }
     }
 
@@ -651,6 +641,8 @@ function clickGamePage( index )
     // 點擊的是一個可以翻開的棋子，於是翻開
     else if ( openChess( chessData, index ) )
     {
+    	playClickSound();
+    	
         switchPlayer();
         aiTurn( ai, getNowPlayer() );
     }
