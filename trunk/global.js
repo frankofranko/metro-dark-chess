@@ -36,8 +36,11 @@ var IOS = 3;
 var BLACK_BERRY = 4;
 var CHROME = 5;
 var FIREFOX = 6;
+//var MOBILE_BROWSER = 7;
 
 var gDeviceName = ANDROID; // 設備名稱
+
+var TOUCH_EVENT_ENABLE = false; // 觸摸事件是否有啓用（在IOS和Android上）
 
 
 //
