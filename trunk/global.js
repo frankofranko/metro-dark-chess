@@ -42,7 +42,6 @@ var gDeviceName = ANDROID; // 設備名稱
 
 var TOUCH_EVENT_ENABLE = false; // 觸摸事件是否有啓用（在IOS和Android上）
 
-
 //
 // 尺寸相關
 //

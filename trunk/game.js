@@ -204,8 +204,7 @@ function jumpMove( page, index )
         indexLength = LOG_NAMES.length;
     }
     
-    if ( !TOUCH_EVENT_ENABLE && 
-         ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE ) )
+    if ( !TOUCH_EVENT_ENABLE && ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE ) )
     {
         var relativeIndex = index + offset;
     
