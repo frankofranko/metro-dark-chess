@@ -204,7 +204,8 @@ function jumpMove( page, index )
         indexLength = LOG_NAMES.length;
     }
     
-    if ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE )
+    if ( !TOUCH_EVENT_ENABLE && 
+         ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE ) )
     {
         var relativeIndex = index + offset;
     
@@ -280,9 +281,12 @@ document.onmousedown = function( event )
 {
     try
     {
-        var x = event.pageX + document.documentElement.scrollLeft;
-        var y = event.pageY + document.documentElement.scrollTop;
-        mousedown( x, y );
+    	if ( !TOUCH_EVENT_ENABLE )
+        {
+            var x = event.pageX + document.documentElement.scrollLeft;
+            var y = event.pageY + document.documentElement.scrollTop;
+            mousedown( x, y );
+        }
     }
     catch ( err )
     {
@@ -296,8 +300,9 @@ document.ontouchstart = function( event )
 {
     try
     {
-        if ( ON_DEVICE && gDeviceName == IOS || gDeviceName == CHROME )
+        //if ( ON_DEVICE && gDeviceName == IOS || gDeviceName == CHROME )
         {
+        	TOUCH_EVENT_ENABLE = true;
             var touch = event.touches[0];
             var x = touch.clientX + document.body.scrollLeft;
             var y = touch.clientY + document.body.scrollTop;
