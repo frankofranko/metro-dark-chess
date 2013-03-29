@@ -894,11 +894,7 @@ function showPage( page )
 
             if ( deviceHeight > deviceWidth ) // 直立
             {
-                if ( gDeviceName == CHROME )
-                {
-                    deviceHeight *= 0.8; 
-                }
-				else if ( gDeviceName == WINDOWS_PHONE )
+                if ( gDeviceName == WINDOWS_PHONE )
                 {
 					deviceHeight *= 1.05; // 棋盤高度增大5%
 					document.body.style.margin = "5% 0% 0% 0%"; // 棋盤往下移
@@ -963,11 +959,7 @@ function showPage( page )
             }
             else // 橫放
             {
-                if ( gDeviceName == CHROME )
-                {
-                    deviceWidth *= 0.8; 
-                }
-                else if ( gDeviceName == WINDOWS_PHONE )
+                if ( gDeviceName == WINDOWS_PHONE )
                 {
                     //deviceHeight *= 1.1; // 棋盤高度縮小5%
                     deviceWidth *= 0.95; // 棋盤寬度縮小5%
