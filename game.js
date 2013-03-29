@@ -296,7 +296,7 @@ document.ontouchstart = function( event )
 {
     try
     {
-        if ( ON_DEVICE && gDeviceName == IOS )
+        if ( ON_DEVICE && gDeviceName == IOS || gDeviceName == CHROME )
         {
             var touch = event.touches[0];
             var x = touch.clientX + document.body.scrollLeft;
