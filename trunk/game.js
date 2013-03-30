@@ -181,7 +181,7 @@ function click( posX, posY )
     }
 }
 
-// CHROME上可以點擊後平移畫面
+// 兩主模式：1.觸摸滑動 和 2.點擊平移(不支援touch event的瀏覽器使用)
 function jumpMove( page, index )
 {
     var backIndex = 0; // 回上一頁的index
@@ -204,6 +204,7 @@ function jumpMove( page, index )
         indexLength = LOG_NAMES.length;
     }
     
+    // 支援touch event的環境皆支援滑動操作
     if ( !TOUCH_EVENT_ENABLE && ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE ) )
     {
         var relativeIndex = index + offset;
@@ -887,6 +888,9 @@ function showPage( page )
 
         setNowPage( page );
 
+        var w;
+        var h;
+
         if ( ON_DEVICE )
         {
             var deviceHeight = document.body.offsetHeight;
@@ -894,6 +898,7 @@ function showPage( page )
 
             if ( deviceHeight > deviceWidth ) // 直立
             {
+
                 if ( gDeviceName == WINDOWS_PHONE )
                 {
 					deviceHeight *= 1.05; // 棋盤高度增大5%
@@ -910,52 +915,41 @@ function showPage( page )
                     }
                     
                 }
+
+                w = deviceHeight / 2;
                 
                 if ( page == RULE_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * RULE_HEIGHT / RULE_WIDTH;
-                    setSize( w, h, page );
+                    
+                    h = w * RULE_HEIGHT / RULE_WIDTH;
+                    
                 }
                 else if ( page == ABOUT_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * ABOUT_HEIGHT / ABOUT_WIDTH;
-
-                    setSize( w, h, page );
+                    h = w * ABOUT_HEIGHT / ABOUT_WIDTH;
                 }
                 else if ( page == LOG_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * LOG_HEIGHT / LOG_WIDTH;
-
-                    setSize( w, h, page );
+                    h = w * LOG_HEIGHT / LOG_WIDTH;
                 }
                 else if ( page == OPTION_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * OPTION_HEIGHT / OPTION_WIDTH;
-                    setSize( w, h, page );
-
+                    h = w * OPTION_HEIGHT / OPTION_WIDTH;
                 }
                 else if ( page == GAME_OVER_DIALOG_PAGE || page == GAME_START_DIALOG_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * DIALOG_HEIGHT / DIALOG_WIDTH;
-                    setSize( w, h, page );
-
+                    h = w * DIALOG_HEIGHT / DIALOG_WIDTH;
                 }
                 else if ( page == GAME_OVER_PAGE )
                 {
-                    var w = deviceHeight / 2;
-                    var h = w * GAME_OVER_HEIGHT / GAME_OVER_WIDTH;
-                    setSize( w, h, page );
-
+                    h = w * GAME_OVER_HEIGHT / GAME_OVER_WIDTH;
                 }
                 else
                 {
-                    setSize( deviceHeight / 2, deviceHeight, page );
+                    h = deviceHeight;
                 }
+
+                setSize( w, h, page );
             }
             else // 橫放
             {
@@ -970,56 +964,47 @@ function showPage( page )
                     document.body.style.margin = "5% 0% 0% 0%"; // 棋盤往下移
                 }
 
+                w = deviceWidth / 2;
+
                 if ( page == RULE_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * RULE_HEIGHT / RULE_WIDTH;
-                    setSize( w, h, page );
+                    h = w * RULE_HEIGHT / RULE_WIDTH;
                 }
                 else if ( page == ABOUT_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * ABOUT_HEIGHT / ABOUT_WIDTH;
-                    setSize( w, h, page );
+                    h = w * ABOUT_HEIGHT / ABOUT_WIDTH;
                 }
                 else if ( page == LOG_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * LOG_HEIGHT / LOG_WIDTH;
-                    setSize( w, h, page );
+                    h = w * LOG_HEIGHT / LOG_WIDTH;
                 }
                 else if ( page == OPTION_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * OPTION_HEIGHT / OPTION_WIDTH;
-                    setSize( w, h, page );
+                    h = w * OPTION_HEIGHT / OPTION_WIDTH;
                 }
                 else if ( page == GAME_OVER_DIALOG_PAGE || page == GAME_START_DIALOG_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * DIALOG_HEIGHT / DIALOG_WIDTH;
-                    setSize( w, h, page );
+                    h = w * DIALOG_HEIGHT / DIALOG_WIDTH;
                 }
                 else if ( page == GAME_OVER_PAGE )
                 {
-                    var w = deviceWidth / 2;
-                    var h = w * GAME_OVER_HEIGHT / GAME_OVER_WIDTH;
-                    setSize( w, h, page );
-
+                    h = w * GAME_OVER_HEIGHT / GAME_OVER_WIDTH;
                 }
                 else
                 {
-                    setSize( deviceWidth / 2, deviceWidth, page );
+                    h = deviceWidth;
                 }
+
+                setSize( h, w, page );
             }
+
         }
         else
         {
             setSize( 400, 800, page );
         }
 
-        swapSize( page );
-
+        //swapSize( page );
 
         if ( page == START_PAGE )
         {
