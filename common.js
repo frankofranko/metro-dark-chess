@@ -178,7 +178,7 @@ function clearDebug()
 // 印出除錯訊息
 function printDebug( message )
 {
-    if ( !ON_DEVICE && DEBUG_MODE )
+    if ( DEBUG_MODE )
     {
         debugMessage.innerHTML += message;
     }
@@ -187,7 +187,7 @@ function printDebug( message )
 // 印出錯誤訊息
 function printError( message )
 {
-    if ( !ON_DEVICE && DEBUG_MODE )
+    if ( DEBUG_MODE )
     {
         //errorMessage.innerHTML += message;
     }
@@ -447,26 +447,31 @@ function setSize( w, h, page )
     var distanceOffset = 0; // 棋子間的間隔
 
     var shorter = document.body.offsetWidth; // 較短的邊
+    var longer = document.body.offsetHeight;
 
-    if ( document.body.offsetWidth > document.body.offsetHeight )
+    if ( shorter > longer )
     {
-        shorter = document.body.offsetHeight;
+        var temp = shorter;
+        shorter = longer;
+        longer = temp;
     }
 
     if ( width < height )
     {
-    
+
         if ( ON_DEVICE )
         {
             chessEatenSize = ( shorter - width ) / 2;
-            
+
             // 防止機身矮胖而導致棋子過大的情形
-            var maxChessEatenSize = height / 16;
+            // (理論上要除以16，但10卻是剛好放滿，很奇怪)
+            var maxChessEatenSize = longer / 10;
             
             if ( chessEatenSize > maxChessEatenSize )
             {
                 chessEatenSize = maxChessEatenSize;
             }
+
         }
         else
         {
@@ -536,7 +541,8 @@ function setSize( w, h, page )
             chessEatenSize = ( shorter - height ) / 2;
             
             // 防止機身矮胖而導致棋子過大的情形
-            var maxChessEatenSize = height / 16;
+            // (理論上要除以16，但10卻是剛好放滿，很奇怪)
+            var maxChessEatenSize = longer / 10;
             
             if ( chessEatenSize > maxChessEatenSize )
             {
@@ -614,8 +620,6 @@ function setSize( w, h, page )
         chessSizeOffset = height / 50; // 棋子字體大小
     }
 
-    //CHESS_COUNT = widthCount * heightCount; // 棋子總數
-
     chessWidth = width / widthCount; // 棋子高度
     chessHeight = height / heightCount; // 棋子寬度
 
@@ -627,10 +631,9 @@ function setSize( w, h, page )
     }
     else
     {
-        chessWidth -= chessWidth / 6;
-        chessHeight -= chessWidth / 6;
+        chessWidth -= chessWidth / 7;
+        chessHeight -= chessWidth / 7;
     }
-
 
     if ( chessWidth < chessHeight )
     {
@@ -1366,8 +1369,6 @@ function comparePrices( pricesA, pricesB )
         }
     }
 
-    printDebug( ".1." );
-
     var validPricesA = getInitPrices();
     var validPricesB = getInitPrices();
 
@@ -1407,9 +1408,6 @@ function comparePrices( pricesA, pricesB )
         }
 
     }
-
-
-    printDebug( ".2." );
 
     return A_B_ARE_SAME;
 }
