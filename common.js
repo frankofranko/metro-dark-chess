@@ -1539,8 +1539,19 @@ function setTrace( tracer, traced )
     }
 }
 
+// 檢查chessData是否已經沒有蓋住的棋子了
+function noCloseChessNow( chessData )
+{
+    for ( var i = 0; i < INDEX_LENGTH; i ++ )
+    {
+        if ( chessData.chessStates[i] == CLOSE )
+        {
+            return false;
+        }
+    }
 
-
+    return true;
+}
 
 
 // print the chessData on demo . ( for debug ) .

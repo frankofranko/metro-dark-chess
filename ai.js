@@ -55,7 +55,7 @@ function moveByAdvanceAI( chesses, chessStates, camp )
 
     simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, n );
 
-    var bestMoves = getBestSimMoves(); // find the best move from last sim .
+    var bestMoves = getBestSimMoves( chessData ); // find the best move from last sim .
 
     printDebug( getCampName( camp ) );
     printDebug( "MedAI:" + bestMoves[0] + "->" + bestMoves[1] );
@@ -141,7 +141,7 @@ function walkOrEatByBestWay( chessData, camp, eatenPrices, n )
 }
 
 // 找出此次最佳的走法的第一步
-function getBestSimMoves()
+function getBestSimMoves( chessData )
 {
     var bestPirces = getInitPrices();
     var bestMoves = getInitMoves();
@@ -174,8 +174,8 @@ function getBestSimMoves()
         }
     }
 
-    // 吃的的沒有比被吃的優, 那就從被吃的中找最少的了
-    if ( !eatBetter )
+    // 吃的的沒有比被吃的優, 那就從被吃的中找最少的了(前提是已經沒有可以棋子可以翻了)
+    if ( !eatBetter && noCloseChessNow( chessData ) )
     {
         bestPirces = getBiggestPrices(); // 因為要找最小，所以隨便給個初始值
 
