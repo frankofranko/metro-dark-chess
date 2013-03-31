@@ -794,7 +794,7 @@ function findNormalEscape( chessData, moveData )
     var camp = getCamp( chessData.chesses[index] );
     var enemyCamp = getAnotherCamp( camp );
 
-    var bestPrice = INIT_PRICE;
+    var bestPrice = price;
     var bestIndex = NOT_FOUND;
 
     // 有被吃危險的最佳作法
