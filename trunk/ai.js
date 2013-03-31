@@ -19,25 +19,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 "use strict";
 
-/*
-1. NormalEat()裡面要檢查吃了之後 是否有幾方棋子也會被吃，而且被吃的還大於吃的？
-
-*/
 
 
 // 設置測試數據
 function setTestChessData()
 {
     // data from the printDemoChessData() .
-/*
-gChesses = new Array( "傌", "卒", "馬", "兵", "象", "陣", "象", "卒", "卒", "陣", "車", "仕", "炮", "士", "兵", "炮", "兵", "卒", "帥", "兵", "相", "車", "將", "包", "傌", "仕", "兵", "卒", "馬", "相", "士", "包" );
-gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, -1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1 );
-*/
+
+    /*
+    gChesses = new Array( "炮", "象", "卒", "馬", "車", "仕", "陣", "相", "仕", "兵", "象", "陣", "卒", "兵", "卒", "包", "士", "相", "兵", "將", "馬", "兵", "卒", "傌", "包", "兵", "帥", "士", "傌", "卒", "炮", "車" );
+    gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1 );
+    */
 
 
-gChesses = new Array( "炮", "象", "卒", "馬", "車", "仕", "陣", "相", "仕", "兵", "象", "陣", "卒", "兵", "卒", "包", "士", "相", "兵", "將", "馬", "兵", "卒", "傌", "包", "兵", "帥", "士", "傌", "卒", "炮", "車" );
-gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1 );
-    printError( "OVER" );
 }
 
 
@@ -55,7 +49,7 @@ function moveByAdvanceAI( chesses, chessStates, camp )
     var eatenPrices = getInitPrices();
     var firstMoves = new Array( NOT_FOUND, NOT_FOUND );
 
-    var n = 3; // 模擬幾回合的攻防
+    var n = PRICES_LENGTH - 1; // 模擬幾回合的攻防
 
     initSim(); // 清除前次的模擬紀錄
 
@@ -103,7 +97,7 @@ function eatByBestWay( chessData, camp )
 
 
 // find the best way to walk or eat, then do it .
-function walkOrEatByBestWay( chessData, camp, eatenPrices )
+function walkOrEatByBestWay( chessData, camp, eatenPrices, n )
 {
     var allOpenMoveData = setAllOpenMoveData( chessData, camp );
     var bestIndex = getBestMoveDataIndex( allOpenMoveData );
@@ -112,6 +106,7 @@ function walkOrEatByBestWay( chessData, camp, eatenPrices )
     {
         var sourceIndex = allOpenMoveData[bestIndex].sourceIndex;
         var destIndex = allOpenMoveData[bestIndex].destIndex;
+
 
         if ( getCamp( chessData.chesses[sourceIndex] ) != camp )
         {
@@ -130,7 +125,7 @@ function walkOrEatByBestWay( chessData, camp, eatenPrices )
         else if ( eat( chessData, destIndex, sourceIndex, camp ) )
         {
             var eatenChess = chessData.chesses[sourceIndex];
-            recordPrice( eatenPrices, getPrice( eatenChess ) );
+            recordPrice( eatenPrices, getPrice( eatenChess ), n );
 
             printDebug( " 被吃" + eatenChess + "]" );
 
@@ -157,7 +152,7 @@ function getBestSimMoves()
 
     for ( var i = 0; i < gSimCount; i ++ )
     {
-        printDebug( i + "<br>去吃：" + gSimEatPrices[i] );
+        printDebug( "<br>第" + i + "種走法：<br>去吃：" + gSimEatPrices[i] );
         printDebug( "<br>被吃：" + gSimEatenPrices[i] );
         printDebug( "<br>" );
 
@@ -169,9 +164,11 @@ function getBestSimMoves()
                 bestPirces = copyPrices( gSimEatPrices[i] );
                 bestMoves = copyMoves( gSimMoves[i] );
                 bestIndex = i;
+
+                printDebug( "有比較好的走法:" + bestIndex );
             }
 
-            //printDebug( "吃的比較好" );
+            
 
             eatBetter = true;
         }
@@ -213,6 +210,8 @@ function saveSim( eatPrices, eatenPrices, moves )
 {
     if ( gSimCount < SIM_LENGTH )
     {
+        printDebug( "[紀錄第" + gSimCount + "種走法]" );
+
         gSimEatPrices[gSimCount] = copyPrices( eatPrices );
         gSimEatenPrices[gSimCount] = copyPrices( eatenPrices );
         gSimMoves[gSimCount] = copyMoves( moves );
@@ -239,10 +238,8 @@ function initSim()
 // 遞迴方式模擬出n步內所有走法（翻棋除外）
 function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, initN )
 {
-    var a = chessData.chesses[15];
-    printDebug( "[15" + getCampName( getCamp( a ) ) + a + "]" );
-
-    printDebug( " <br>[第" + ( initN - n ) + "回合: 剩" + ( SIM_LENGTH - gSimCount ) + "個位置可放模擬紀錄] " );
+    var nowRound = initN - n; // 目前進行的回合
+    printDebug( " <br>[第" + nowRound + "回合: 剩" + ( SIM_LENGTH - gSimCount ) + "個位置可放模擬紀錄] " );
 
     if ( n > 0 && gSimCount < SIM_LENGTH )
     {
@@ -283,10 +280,6 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                 var innerEatPrices = copyPrices( eatPrices );
                 var innerEatenPrices = copyPrices( eatenPrices );
 
-                //var a = innerChessData.chesses[15];
-    //printDebug( "[15" + getCampName( getCamp( a ) ) + a + "]" );
-
-
                 var debugString = "";
 
                 if ( move( innerChessData, destIndex, sourceIndex, camp ) )
@@ -298,7 +291,7 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                 {
                     var eatChess = innerChessData.chesses[sourceIndex];
 
-                    recordPrice( innerEatPrices, getPrice( eatChess ) );
+                    recordPrice( innerEatPrices, getPrice( eatChess ), nowRound );
 
                     debugString = " 吃" + eatChess;
                     canEat = true;
@@ -314,12 +307,10 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                         firstMoves[1] = destIndex;
                     }
 
-                    printDebug( " [" + ( initN - n ) + "rd 我方:" + sourceIndex + "->" + destIndex + debugString + "]" );
+                    printDebug( " [" + nowRound + "rd 我方:" + sourceIndex + "->" + destIndex + debugString + "]" );
 
                     
-
-                    //printError( "[IN:" + n + "]" );
-                    walkOrEatByBestWay( innerChessData, getAnotherCamp( camp ), innerEatenPrices );
+                    walkOrEatByBestWay( innerChessData, getAnotherCamp( camp ), innerEatenPrices, nowRound );
                     
                     simAllWay( innerChessData, camp, innerEatPrices, innerEatenPrices, firstMoves, n - 1, initN );
                     
@@ -1921,8 +1912,8 @@ function moveByAI( chesses, chessStates, camp )
     }
 
     printError( getCampName( camp ) );
-    printError( gChesses[allMoveData[bestIndex].sourceIndex] +  allMoveData[bestIndex].sourceIndex + " -> " +
-                gChesses[allMoveData[bestIndex].destIndex] + allMoveData[bestIndex].destIndex + "   " );
+    printError( chesses[allMoveData[bestIndex].sourceIndex] +  allMoveData[bestIndex].sourceIndex + " -> " +
+                chesses[allMoveData[bestIndex].destIndex] + allMoveData[bestIndex].destIndex + "   " );
 
 
     moves[0] = allMoveData[bestIndex].sourceIndex;
