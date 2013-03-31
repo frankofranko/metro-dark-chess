@@ -22,8 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ﻿//
 // 系統相關
 //
-var ON_DEVICE = 0; // 是否在平台上測試
-var DEBUG_MODE = 1; // 是否為除錯模式
+var ON_DEVICE = 1; // 是否在平台上測試
+var DEBUG_MODE = 0; // 是否為除錯模式
 var RESET = 0; // 重新使用預設設定
 
 //

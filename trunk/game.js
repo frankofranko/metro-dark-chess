@@ -1067,6 +1067,8 @@ function startGame()
 			//setSystemColor( "green", "black" );
 			//setDefaultLanguage( "TW" );
 			showPage( START_PAGE );
+
+            printDebug( getCampName( getCamp( "包" ) ) );
 		}
         
         
