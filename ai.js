@@ -43,7 +43,7 @@ function moveByAdvanceAI( chesses, chessStates, camp )
     var eatenPrices = getInitPrices();
     var firstMoves = new Array( NOT_FOUND, NOT_FOUND );
 
-    var n = 3;
+    var n = 7;
 
     initSim(); // 清除前次的模擬紀錄
 
@@ -109,13 +109,14 @@ function getBestSimMoves()
     var bestPirces = getInitPrices();
     var bestMoves = getInitMoves();
     var eatBetter = false; // 吃的比被吃的優
+    var bestIndex = NOT_FOUND;
 
     printDebug( "首選:" );
 
     for ( var i = 0; i < gSimCount; i ++ )
     {
-        printDebug( i + "<br>" + gSimEatPrices[i] );
-        printDebug( "<br>" + gSimEatenPrices[i] );
+        printDebug( i + "<br>去吃：" + gSimEatPrices[i] );
+        printDebug( "<br>被吃：" + gSimEatenPrices[i] );
         printDebug( "<br>" );
 
         // 若被吃得比吃得好 , 就不考慮了
@@ -125,18 +126,20 @@ function getBestSimMoves()
             {
                 bestPirces = copyPrices( gSimEatPrices[i] );
                 bestMoves = copyMoves( gSimMoves[i] );
+                bestIndex = i;
             }
+
+            //printDebug( "吃的比較好" );
 
             eatBetter = true;
         }
     }
 
-    var bestIndex = NOT_FOUND;
-    var bestPirces = getBiggestPrices(); // 因為要找最小，所以隨便給個初始值
-
     // 吃的的沒有比被吃的優, 那就從被吃的中找最少的了
     if ( !eatBetter )
     {
+        bestPirces = getBiggestPrices(); // 因為要找最小，所以隨便給個初始值
+
         printDebug( "次選:" );
 
         for ( var i = 0; i < gSimCount; i ++ )
