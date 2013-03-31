@@ -1253,10 +1253,7 @@ function AeatB( aChess, bChess )
     }
 }
 
-//
-// prices functions for AI
-//
-
+/*
 function recordPrice( priceQueue, price )
 {
     for ( var i = 0; i < priceQueue.length; i ++ )
@@ -1266,6 +1263,22 @@ function recordPrice( priceQueue, price )
             priceQueue[i] = price;
             return true;
         }
+    }
+
+    return false;
+}
+*/
+
+//
+// prices functions for AI
+//
+function recordPrice( priceQueue, price, n )
+{
+    if ( n < priceQueue.length )
+    {
+        priceQueue[n] = price;
+
+        return true;
     }
 
     return false;
@@ -1347,6 +1360,27 @@ function copyPrices( prices )
     return tempPrices;
 }
 
+// 檢查兩種prices是否相同
+function samePrices( pircesA, pricesB )
+{
+    if ( pricesA.length != pricesB.length )
+    {
+        return false;
+    }
+    else
+    {
+        for ( var i = 0; i < pricesA.length; i ++ )
+        {
+            if ( pricesA[i] != pricesB[i] )
+            {
+                return false;
+            }
+        }
+
+        return true;  
+    }
+}
+
 // 比較prices的優劣
 function comparePrices( pricesA, pricesB )
 {
@@ -1408,6 +1442,32 @@ function comparePrices( pricesA, pricesB )
         }
 
     }
+
+
+    // third, we compare the real order of the price
+    for ( var j = pricesA.length-1; j >= 0 && sortPricesA[j] != INIT_PRICE; j -- )
+    {
+        var tempPrice = sortPricesA[j];
+
+        for ( var i = 0; i < pricesA.length; i ++ )
+        {
+            if ( pricesA[i] == tempPrice &&
+                 pricesB[i] != tempPrice )
+            {
+                return A_IS_BETTER;
+            }
+            else if ( pricesB[i] == tempPrice &&
+                 pricesA[i] != tempPrice )
+            {
+                return B_IS_BETTER;
+            }
+        }
+    }
+
+    
+
+    printDebug( "===")
+
 
     return A_B_ARE_SAME;
 }
