@@ -488,7 +488,7 @@ var gPlayerCamp; // 此局玩家陣營
 // 模擬相關
 //
 
-var SIM_LENGTH = 300;  // 模擬紀錄上限
+var SIM_LENGTH = 100;  // 模擬紀錄上限
 var PRICES_LENGTH = 100; // 單次吃棋或被吃的權值數上限
 var A_IS_BETTER = 0; // A(第一個)較優
 var B_IS_BETTER = 1; // B(第二個)較優

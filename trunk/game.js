@@ -1001,7 +1001,7 @@ function showPage( page )
         }
         else
         {
-            setSize( 400, 800, page );
+            setSize( 800, 400, page );
         }
 
         //swapSize( page );
