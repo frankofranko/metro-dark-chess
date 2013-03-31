@@ -19,11 +19,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 "use strict";
 
+/*
+1. NormalEat()裡面要檢查吃了之後 是否有幾方棋子也會被吃，而且被吃的還大於吃的？
+
+*/
+
 
 // 設置測試數據
 function setTestChessData()
 {
     // data from the printDemoChessData() .
+
+gChesses = new Array( "傌", "卒", "馬", "兵", "象", "陣", "象", "卒", "卒", "陣", "車", "仕", "炮", "士", "兵", "炮", "兵", "卒", "帥", "兵", "相", "車", "將", "包", "傌", "仕", "兵", "卒", "馬", "相", "士", "包" );
+gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, -1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1 );
 
     printError( "OVER" );
 }
@@ -66,8 +74,28 @@ function moveByAdvanceAI( chesses, chessStates, camp )
 
 }
 
+// return n: 當前局面最佳走法是吃價值為n的敵方棋子
+//        NOT_FOUND: 當前局面最佳走法不是吃棋。
+function eatByBestWay( chessData, camp )
+{
+    var allOpenMoveData = setAllOpenMoveData( chessData, camp );
+    var bestIndex = getBestMoveDataIndex( allOpenMoveData );
 
+    if ( bestIndex != NOT_FOUND )
+    {
+        var sourceIndex = allOpenMoveData[bestIndex].sourceIndex;
+        var destIndex = allOpenMoveData[bestIndex].destIndex;
 
+        if ( eat( chessData, destIndex, sourceIndex, camp ) )
+        {
+            var eatenChess = chessData.chesses[sourceIndex];
+
+            return getPrice( eatenChess );
+        }
+    }
+
+    return NOT_FOUND;
+}
 
 
 // find the best way to walk or eat, then do it .
@@ -916,10 +944,17 @@ function findNormalEat( chessData, moveData, principle )
             }
 
             // 檢查吃之後會不會有立即危險
-            var beSafe = safeState( tempChessData, destIndex );
+            //var beSafe = safeState( tempChessData, destIndex ); //XX
+
+            var eatenPrice = eatByBestWay( tempChessData, enemyCamp );
+            var beSafe = ( eatenPrice == NOT_FOUND ) ? true : false;
+
+            if ( !beSafe )
+            printDebug( "EP: " + eatenPrice + "<br>" );
+
 
             if ( ( principle == SAFE_FIRST_PRINCIPLE && beSafe ) ||
-                 ( principle == PRICE_FIRST_PRINCIPLE && ( beSafe || price <= enemyPrice ) ) ||
+                 ( principle == PRICE_FIRST_PRINCIPLE && ( beSafe || eatenPrice <= enemyPrice ) ) ||
                  ( principle == EAT_FIRST_PRINCIPLE ) )
             {
                 if ( ( bestPrice < enemyPrice ) ||
