@@ -29,10 +29,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 function setTestChessData()
 {
     // data from the printDemoChessData() .
-
+/*
 gChesses = new Array( "傌", "卒", "馬", "兵", "象", "陣", "象", "卒", "卒", "陣", "車", "仕", "炮", "士", "兵", "炮", "兵", "卒", "帥", "兵", "相", "車", "將", "包", "傌", "仕", "兵", "卒", "馬", "相", "士", "包" );
 gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, -1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1 );
+*/
 
+
+gChesses = new Array( "炮", "象", "卒", "馬", "車", "仕", "陣", "相", "仕", "兵", "象", "陣", "卒", "兵", "卒", "包", "士", "相", "兵", "將", "馬", "兵", "卒", "傌", "包", "兵", "帥", "士", "傌", "卒", "炮", "車" );
+gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1 );
     printError( "OVER" );
 }
 
@@ -51,7 +55,7 @@ function moveByAdvanceAI( chesses, chessStates, camp )
     var eatenPrices = getInitPrices();
     var firstMoves = new Array( NOT_FOUND, NOT_FOUND );
 
-    var n = 7;
+    var n = 3; // 模擬幾回合的攻防
 
     initSim(); // 清除前次的模擬紀錄
 
@@ -109,11 +113,18 @@ function walkOrEatByBestWay( chessData, camp, eatenPrices )
         var sourceIndex = allOpenMoveData[bestIndex].sourceIndex;
         var destIndex = allOpenMoveData[bestIndex].destIndex;
 
-        printDebug( " [e:" + sourceIndex + "->" + destIndex + "] " );
+        if ( getCamp( chessData.chesses[sourceIndex] ) != camp )
+        {
+            printError( "錯誤: 誤判陣營" );
+            return false;
+        }
+
+        printDebug( " [敵行動:" + sourceIndex + "->" + destIndex + ": " );
+        printDebug( "敵方：" + camp );
 
         if ( move( chessData, destIndex, sourceIndex, camp ) )
         {
-
+            printDebug( " 移]" );
             return true;
         }
         else if ( eat( chessData, destIndex, sourceIndex, camp ) )
@@ -121,10 +132,13 @@ function walkOrEatByBestWay( chessData, camp, eatenPrices )
             var eatenChess = chessData.chesses[sourceIndex];
             recordPrice( eatenPrices, getPrice( eatenChess ) );
 
-            printDebug( " 被吃" + eatenChess );
+            printDebug( " 被吃" + eatenChess + "]" );
 
             return true;
-
+        }
+        else
+        {
+            printDebug( "]" );
         }
     }
 
@@ -225,7 +239,10 @@ function initSim()
 // 遞迴方式模擬出n步內所有走法（翻棋除外）
 function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, initN )
 {
-    printDebug( " [n:" + n + "] " );
+    var a = chessData.chesses[15];
+    printDebug( "[15" + getCampName( getCamp( a ) ) + a + "]" );
+
+    printDebug( " <br>[第" + ( initN - n ) + "回合: 剩" + ( SIM_LENGTH - gSimCount ) + "個位置可放模擬紀錄] " );
 
     if ( n > 0 && gSimCount < SIM_LENGTH )
     {
@@ -256,10 +273,8 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                     continue;
                 }
 
-                printDebug( " " + n + "[" + sourceIndex + "," + destIndex + "]" );
 
-
-                //printError( camp + "-" + chessData.chesses[sourceIndex] + "->" + chessData.chesses[destIndex] );
+                
 
                 var canMove = false;
                 var canEat = false;
@@ -268,8 +283,15 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                 var innerEatPrices = copyPrices( eatPrices );
                 var innerEatenPrices = copyPrices( eatenPrices );
 
+                //var a = innerChessData.chesses[15];
+    //printDebug( "[15" + getCampName( getCamp( a ) ) + a + "]" );
+
+
+                var debugString = "";
+
                 if ( move( innerChessData, destIndex, sourceIndex, camp ) )
                 {
+                    debugString = " 移";
                     canMove = true;
                 }
                 else if ( eat( innerChessData, destIndex, sourceIndex, camp ) )
@@ -278,8 +300,7 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
 
                     recordPrice( innerEatPrices, getPrice( eatChess ) );
 
-                    printDebug( " 吃" + eatChess );
-
+                    debugString = " 吃" + eatChess;
                     canEat = true;
                 }
 
@@ -293,18 +314,20 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                         firstMoves[1] = destIndex;
                     }
 
-                    printDebug( " [" + n + ":m:" + sourceIndex + "->" + destIndex + "] " );
+                    printDebug( " [" + ( initN - n ) + "rd 我方:" + sourceIndex + "->" + destIndex + debugString + "]" );
 
+                    
 
                     //printError( "[IN:" + n + "]" );
-                    if ( walkOrEatByBestWay( innerChessData, getAnotherCamp( camp ), innerEatenPrices ) )
-                    {
-                        simAllWay( innerChessData, camp, innerEatPrices, innerEatenPrices, firstMoves, n - 1, initN );
-                    }
-                    else
-                    {
-                        saveSim( innerEatPrices, innerEatenPrices, firstMoves );
-                    }
+                    walkOrEatByBestWay( innerChessData, getAnotherCamp( camp ), innerEatenPrices );
+                    
+                    simAllWay( innerChessData, camp, innerEatPrices, innerEatenPrices, firstMoves, n - 1, initN );
+                    
+                    
+                    //printDebug( "[敵方無法應對]" );
+                    //printDebug( "內部：" + innerEatPrices );
+                    saveSim( innerEatPrices, innerEatenPrices, firstMoves );
+                    //}
 
                 }
             }
@@ -933,7 +956,7 @@ function findNormalEat( chessData, moveData, principle )
         {
             // 此被吃棋B是否有機會可以直接吃我方某棋A，若有則檢查A權值是否比B大
             var tempEnemyPrice = existSimEatChance( chessData, destIndex, chessData.chesses[destIndex] );
-            printDebug( " D:" + destIndex );
+            //printDebug( " D:" + destIndex );
 
             if ( tempEnemyPrice != NOT_FOUND )
             {
@@ -949,8 +972,8 @@ function findNormalEat( chessData, moveData, principle )
             var eatenPrice = eatByBestWay( tempChessData, enemyCamp );
             var beSafe = ( eatenPrice == NOT_FOUND ) ? true : false;
 
-            if ( !beSafe )
-            printDebug( "EP: " + eatenPrice + "<br>" );
+            //if ( !beSafe )
+            //printDebug( "EP: " + eatenPrice + "<br>" );
 
 
             if ( ( principle == SAFE_FIRST_PRINCIPLE && beSafe ) ||
@@ -961,7 +984,7 @@ function findNormalEat( chessData, moveData, principle )
                      ( bestPrice == enemyPrice && tempEnemyPrice != NOT_FOUND ) ||
                      ( bestPrice == enemyPrice && randomChoice() && !existProtectToEat ) )
                 {
-                    printDebug( " " + index + " >> " +  destIndex + " " );
+                    //printDebug( " " + index + " e " +  destIndex + " " );
 
                     bestPrice = enemyPrice;
                     bestIndex = destIndex;
