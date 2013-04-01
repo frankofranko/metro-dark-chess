@@ -26,11 +26,10 @@ function setTestChessData()
 {
     // data from the printDemoChessData() .
 
-    /*
-    gChesses = new Array( "炮", "象", "卒", "馬", "車", "仕", "陣", "相", "仕", "兵", "象", "陣", "卒", "兵", "卒", "包", "士", "相", "兵", "將", "馬", "兵", "卒", "傌", "包", "兵", "帥", "士", "傌", "卒", "炮", "車" );
-    gChessStates = new Array( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1 );
-    */
-
+/*
+gChesses = new Array( "卒", "士", "包", "仕", "兵", "陣", "馬", "炮", "象", "陣", "帥", "相", "馬", "卒", "傌", "兵", "兵", "傌", "兵", "車", "將", "卒", "仕", "包", "兵", "士", "卒", "車", "卒", "象", "炮", "相" );
+gChessStates = new Array( 1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 0, 0, 0, 0, -1, 1, 1, -1, 0, -1, 0, -1, -1, 0, 1, 1, -1, -1, 0, 0, -1, -1 );
+*/
 
 }
 
@@ -76,23 +75,25 @@ function moveByAdvanceAI( chesses, chessStates, camp )
 //        NOT_FOUND: 當前局面最佳走法不是吃棋。
 function eatByBestWay( chessData, camp )
 {
-    var allOpenMoveData = setAllOpenMoveData( chessData, camp );
-    var bestIndex = getBestMoveDataIndex( allOpenMoveData );
+    var highestPrice = NOT_FOUND;
 
-    if ( bestIndex != NOT_FOUND )
+    for ( var i = 0; i < INDEX_LENGTH; i ++ )
     {
-        var sourceIndex = allOpenMoveData[bestIndex].sourceIndex;
-        var destIndex = allOpenMoveData[bestIndex].destIndex;
-
-        if ( eat( chessData, destIndex, sourceIndex, camp ) )
+        if ( chessData.chessStates[i] == OPEN &&
+             getCamp( chessData.chesses[i] ) == camp )
         {
-            var eatenChess = chessData.chesses[sourceIndex];
+            var chess = chessData.chesses[i];
+            var eatPrice = existSimEatChance( chessData, i, chess );
+            var price = getPrice( chess );
 
-            return getPrice( eatenChess );
+            if ( eatPrice > highestPrice )
+            {
+                highestPrice = eatPrice;
+            }
         }
     }
 
-    return NOT_FOUND;
+    return highestPrice;
 }
 
 
@@ -352,14 +353,19 @@ function existSimEatChance( chessData, index, chess )
     var simChessData = copyChessData( chessData );
     var camp = getCamp( chess );
 
-
     // 指定 index 位置是 OPEN狀態的 chess .
     simChessData.chesses[index] = chess;
     simChessData.chessStates[index] = OPEN;
 
-    for ( var i = 0; i < INDEX_LENGTH; i ++ )
+    var neighborIndexs = getNeighborIndexs( index );
+    var isCannon = ( getRank( chess ) == RANK_CANNON );
+    var moveLength = isCannon ? INDEX_LENGTH : 4;
+
+    for ( var j = 0; j < moveLength; j ++ )
     {
-        if ( canEat( simChessData, i, index, camp ) )
+        var destIndex = isCannon ? j : neighborIndexs[j];
+
+        if ( canEat( simChessData, j, destIndex, camp ) )
         {
             return getPrice( simChessData.chesses[i] );
         }
@@ -458,7 +464,7 @@ function findInvasiveWalk( chessData, moveData )
                        canEat( chessData, tempIndex, index, camp ) ) &&
                      !existSimEatenChance( chessData, tempIndex, chess ) ) // 移動到該處沒有立即危險
                 {
-                    printError( "目標是" + chessData.chesses[i] + ": " );
+                    //printError( "目標是" + chessData.chesses[i] + ": " );
                     //printError( "　距離是" + tempDistance );
                     bestDistance = tempDistance;
                     bestDirection = tempDirection;
@@ -827,7 +833,7 @@ function findNormalEscape( chessData, moveData )
         // 若可能被鄰居吃的時候
         if ( canEat( chessData, index, i, enemyCamp ) )
         {
-            printError( " 可能被吃: " );
+            //printError( " 可能被吃: " );
 
             targetIndex = i;
 
@@ -1656,7 +1662,6 @@ function getMoveDataForOpenChess( chessData, index, camp )
     findDangeroursEat( chessData, moveData );
     findDangerousWalk( chessData, moveData );
 
-
     return moveData;
 }
 
@@ -1891,8 +1896,6 @@ function getBestMoveDataIndex( allMoveData )
 function moveByAI( chesses, chessStates, camp )
 {
 
-
-
     var moves = new Array( 2 );
 
     var record = "";
@@ -1921,7 +1924,6 @@ function moveByAI( chesses, chessStates, camp )
 
     moves[0] = allMoveData[bestIndex].sourceIndex;
     moves[1] = allMoveData[bestIndex].destIndex;
-
 
     return moves;
 }

@@ -648,7 +648,7 @@ function clickGamePage( index )
         aiTurn( ai, getNowPlayer() );
     }
     // 點擊的是沒有棋子的地方，若在除錯模式要印出目前棋子配製狀況
-    else if ( DEBUG_MODE )
+    else if ( !ON_DEVICE )
     {
         printDemoChessData();
     }
@@ -851,7 +851,10 @@ function initGame()
     cleanArray( gEatenRedQueue, INIT_EATEN_VALUE ); // 將被吃紅棋清空
     cleanArray( gEatenPriorityQueue, INIT_EATEN_VALUE ); // 被吃棋子的優先權
 
-    setTestChessData();
+    if ( DEBUG_MODE || !ON_DEVICE )
+    {
+        setTestChessData();
+    }
 }
 
 // 開始頁面
