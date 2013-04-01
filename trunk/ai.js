@@ -241,37 +241,41 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
     var nowRound = initN - n; // 目前進行的回合
     printDebug( " <br>[第" + nowRound + "回合: 剩" + ( SIM_LENGTH - gSimCount ) + "個位置可放模擬紀錄] " );
 
-    if ( n > 0 && gSimCount < SIM_LENGTH )
+    if ( n > 0 )
     {
-        for ( var i = 0; i < INDEX_LENGTH; i ++ )
+        for ( var i = 0; i < INDEX_LENGTH && gSimCount < SIM_LENGTH; i ++ )
         {
+            var sourceIndex = i;
+
+            if ( destIndex == NOT_FOUND ||
+                 chessData.chessStates[sourceIndex] != OPEN ||
+                 getCamp( chessData.chesses[sourceIndex] ) != camp )
+            {
+                continue;
+            }
+
             var neighborIndexs;
             var moveLength = INDEX_LENGTH; // 砲要檢查所有位置
-            var isCannon = getRank( chessData.chesses[i] ) == RANK_CANNON ? true : false;
+            var isCannon = getRank( chessData.chesses[sourceIndex] ) == RANK_CANNON ? true : false;
 
             if ( !isCannon )
             {
-                neighborIndexs = getNeighborIndexs( i );
+                neighborIndexs = getNeighborIndexs( sourceIndex );
                 moveLength = 4; // 其餘棋子只需檢察四個鄰近方位
             }
 
+            //printDebug( "_"+chessData.chesses[sourceIndex] + moveLength + "_" );
+
             for ( var j = 0; j < moveLength; j ++ )
             {
+                printDebug( "." );
+
                 var destIndex = isCannon ? j : neighborIndexs[j];
-                var sourceIndex = i;
 
-                //printDebug( "[" + sourceIndex + "," + destIndex + "]" );
-
-                if ( destIndex == NOT_FOUND ||
-                     chessData.chessStates[sourceIndex] != OPEN ||
-                     chessData.chessStates[destIndex] == CLOSE ||
-                     getCamp( chessData.chesses[sourceIndex] ) != camp )
+                if ( chessData.chessStates[destIndex] == CLOSE )
                 {
                     continue;
                 }
-
-
-                
 
                 var canMove = false;
                 var canEat = false;
@@ -312,13 +316,12 @@ function simAllWay( chessData, camp, eatPrices, eatenPrices, firstMoves, n, init
                     
                     walkOrEatByBestWay( innerChessData, getAnotherCamp( camp ), innerEatenPrices, nowRound );
                     
-                    simAllWay( innerChessData, camp, innerEatPrices, innerEatenPrices, firstMoves, n - 1, initN );
+                    if ( n > 0 && gSimCount < SIM_LENGTH )
+                    {
+                        simAllWay( innerChessData, camp, innerEatPrices, innerEatenPrices, firstMoves, n - 1, initN );
+                    }
                     
-                    
-                    //printDebug( "[敵方無法應對]" );
-                    //printDebug( "內部：" + innerEatPrices );
                     saveSim( innerEatPrices, innerEatenPrices, firstMoves );
-                    //}
 
                 }
             }
