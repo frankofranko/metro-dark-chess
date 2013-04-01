@@ -367,7 +367,7 @@ function existSimEatChance( chessData, index, chess )
 
         if ( canEat( simChessData, j, destIndex, camp ) )
         {
-            return getPrice( simChessData.chesses[i] );
+            return getPrice( simChessData.chesses[j] );
         }
     }
 
