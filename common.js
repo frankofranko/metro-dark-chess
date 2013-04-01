@@ -163,7 +163,7 @@ function printGame( message )
         playerString = "紅方";
     }
 
-    if ( !ON_DEVICE && DEBUG_MODE )
+    if ( !ON_DEVICE || DEBUG_MODE )
     {
         gameMessage.innerHTML = message + "&nbsp;&nbsp;&nbsp;玩家: " + playerString;
     }
@@ -189,7 +189,7 @@ function printError( message )
 {
     if ( DEBUG_MODE )
     {
-        //errorMessage.innerHTML += message;
+        errorMessage.innerHTML += message;
     }
 }
 

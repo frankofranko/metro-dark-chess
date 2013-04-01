@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // 系統相關
 //
 var ON_DEVICE = 0; // 是否在平台上測試
-var DEBUG_MODE = 1; // 是否為除錯模式
+var DEBUG_MODE = 0; // 是否為除錯模式
 var RESET = 0; // 重新使用預設設定
 
 //
@@ -488,8 +488,8 @@ var gPlayerCamp; // 此局玩家陣營
 // 模擬相關
 //
 
-var SIM_LENGTH = 10;  // 模擬紀錄上限
-var PRICES_LENGTH = 4; // 單次吃棋或被吃的權值數上限 (也是模擬回合的上限)
+var SIM_LENGTH = 100;  // 模擬紀錄上限
+var PRICES_LENGTH = 3; // 單次吃棋或被吃的權值數上限 (也是模擬回合的上限)
 var A_IS_BETTER = 0; // A(第一個)較優
 var B_IS_BETTER = 1; // B(第二個)較優
 var A_B_ARE_SAME = 2; // 第一個跟第二個同等
