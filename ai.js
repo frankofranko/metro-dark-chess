@@ -29,7 +29,12 @@ function setTestChessData()
 /*
 gChesses = new Array( "卒", "士", "包", "仕", "兵", "陣", "馬", "炮", "象", "陣", "帥", "相", "馬", "卒", "傌", "兵", "兵", "傌", "兵", "車", "將", "卒", "仕", "包", "兵", "士", "卒", "車", "卒", "象", "炮", "相" );
 gChessStates = new Array( 1, -1, -1, -1, -1, -1, 1, -1, -1, -1, 0, 0, 0, 0, -1, 1, 1, -1, 0, -1, 0, -1, -1, 0, 1, 1, -1, -1, 0, 0, -1, -1 );
+
+
+gChesses = new Array( "仕", "兵", "相", "相", "兵", "兵", "象", "陣", "包", "士", "兵", "士", "象", "傌", "卒", "車", "卒", "帥", "炮", "炮", "仕", "兵", "馬", "卒", "車", "陣", "將", "卒", "卒", "包", "傌", "馬" );
+gChessStates = new Array( 0, -1, -1, -1, 1, -1, -1, -1, 0, 0, -1, 0, 0, 1, -1, -1, 0, 1, -1, 1, 0, -1, -1, 1, 0, -1, 0, -1, 0, -1, 1, 0 );
 */
+
 
 }
 
@@ -71,6 +76,30 @@ function moveByAdvanceAI( chesses, chessStates, camp )
 
 }
 
+// 取得camp陣營的normalEat其中最大的price
+function getBestNormalEatPrice( chessData, camp )
+{
+    var bestPrice = INIT_PRICE;
+
+    for ( var i = 0; i < INDEX_LENGTH; i ++ )
+    {
+        if ( chessData.chessStates[i] == OPEN &&
+             getCamp( chessData.chesses[i] ) == camp )
+        {
+            var moveData = getEmptyMoveData( i );
+            if ( findNormalEat( chessData, moveData, PRICE_FIRST_PRINCIPLE, 0 ) )
+            {
+                if ( bestPrice < moveData.price )
+                {
+                    bestPrice = moveData.price;
+                }
+            }
+        }
+    }
+
+    return bestPrice;
+}
+
 // return n: 當前局面最佳走法是吃價值為n的敵方棋子
 //        NOT_FOUND: 當前局面最佳走法不是吃棋。
 function eatByBestWay( chessData, camp )
@@ -82,9 +111,12 @@ function eatByBestWay( chessData, camp )
         if ( chessData.chessStates[i] == OPEN &&
              getCamp( chessData.chesses[i] ) == camp )
         {
+            printDebug( chessData.chesses[i] + ":" );
             var chess = chessData.chesses[i];
             var eatPrice = existSimEatChance( chessData, i, chess );
             var price = getPrice( chess );
+
+            printDebug( eatPrice + "," );
 
             if ( eatPrice > highestPrice )
             {
@@ -395,22 +427,6 @@ function existSimEatenChance( chessData, index, chess )
     }
 
     return false;
-}
-
-
-function simEat( camp )
-{
-    for ( var i = 0; i < INDEX_LENGTH; i ++ )
-    {
-        var moveData = newMoveData( i );
-
-        if ( chessData.chessStates[i] == OPEN &&
-             getCamp( chessData.chesses[i] ) == camp && // 己方翻開棋子
-             findNormalEat( chessData, moveData, EAT_FIRST_PRINCIPLE ) )
-        {
-
-        }
-    }
 }
 
 
@@ -884,7 +900,7 @@ function findNormalEscape( chessData, moveData )
                 }
             }
             // 再找自殺吃棋的機會
-            else if ( findNormalEat( chessData, tempMoveData3, EAT_FIRST_PRINCIPLE ) )
+            else if ( findNormalEat( chessData, tempMoveData3, EAT_FIRST_PRINCIPLE, 1 ) )
             {
                 if ( ( bestPrice < tempMoveData3.price ) ||
                      ( bestPrice == tempMoveData3.price && randomChoice() ) )
@@ -914,7 +930,7 @@ function findNormalEscape( chessData, moveData )
 
 
 // 嘗試吃棋子
-function findNormalEat( chessData, moveData, principle )
+function findNormalEat( chessData, moveData, principle, n )
 {
     var index = moveData.sourceIndex;
     var priority = NORMAL_EAT;
@@ -967,14 +983,17 @@ function findNormalEat( chessData, moveData, principle )
             }
 
             // 檢查吃之後會不會有立即危險
-            //var beSafe = safeState( tempChessData, destIndex ); //XX
+            var beSafe = safeState( tempChessData, destIndex ); //XX
 
-            var eatenPrice = eatByBestWay( tempChessData, enemyCamp );
-            var beSafe = ( eatenPrice == NOT_FOUND ) ? true : false;
+            //var eatenPrice = price;
+            //var eatenPrice = eatByBestWay( tempChessData, enemyCamp );
+            //var beSafe = ( eatenPrice == NOT_FOUND ) ? true : false;
+            var eatenPrice = beSafe ? 0 : price;
 
-            //if ( !beSafe )
-            //printDebug( "EP: " + eatenPrice + "<br>" );
-
+            if ( n > 0 )
+            {
+                eatenPrice = getBestNormalEatPrice( tempChessData, enemyCamp );
+            }
 
             if ( ( principle == SAFE_FIRST_PRINCIPLE && beSafe ) ||
                  ( principle == PRICE_FIRST_PRINCIPLE && ( beSafe || eatenPrice <= enemyPrice ) ) ||
@@ -1072,7 +1091,7 @@ function findWalkToEat( chessData, moveData )
             }
 
             // 有吃的機會
-            if ( findNormalEat( tempChessData, tempMoveData, PRICE_FIRST_PRINCIPLE ) )
+            if ( findNormalEat( tempChessData, tempMoveData, PRICE_FIRST_PRINCIPLE, 1 ) )
             {
                 enemyChess = tempChessData.chesses[tempMoveData.destIndex];
 
@@ -1651,9 +1670,9 @@ function allNeighborsInState( chessData, index, state )
 function getMoveDataForOpenChess( chessData, index, camp )
 {
     var moveData = newMoveData( index );
-    findNormalEat( chessData, moveData, PRICE_FIRST_PRINCIPLE );
+    findNormalEat( chessData, moveData, PRICE_FIRST_PRINCIPLE, 1 );
     findNormalEscape( chessData, moveData );
-    findNormalEat( chessData, moveData, PRICE_FIRST_PRINCIPLE );
+    findNormalEat( chessData, moveData, PRICE_FIRST_PRINCIPLE, 1 );
 
     findWalkToEat( chessData, moveData );
     findOpenToEat( chessData, moveData );
