@@ -294,6 +294,35 @@ document.onmousedown = function( event )
     }
 }
 
+//滑鼠左鍵離開的事件 for ios
+document.ontouchend = function( event )
+{
+    
+    try
+    {
+        var touch = event.touches[0];
+        var x = touch.clientX + document.body.scrollLeft;
+        var y = touch.clientY + document.body.scrollTop;
+
+        if ( gTouchStartX > 0 && gTouchStartY > 0 )
+        { 
+            var differenceX = gTouchStartX > x ? gTouchStartX - x : x - gTouchStartX;
+
+            var differenceY = gTouchStartY > y ? gTouchStartY - y : y - gTouchStartY;
+
+            // 若有滑動動作，則跳出到開始畫面
+            if ( differenceX > width / 3 && differenceY < height / 10 )
+            {
+                showPage( START_PAGE );
+            }
+        }
+
+    }
+    catch ( err )
+    {
+        errorMessage.innerHTML += "發生錯誤: " + err.stack + "<br>";
+    }
+}
 
 // 滑鼠左鍵按下的事件 for ios
 document.ontouchstart = function( event )
@@ -306,6 +335,7 @@ document.ontouchstart = function( event )
             var touch = event.touches[0];
             var x = touch.clientX + document.body.scrollLeft;
             var y = touch.clientY + document.body.scrollTop;
+            gTouchStartX = x;
             mousedown( x, y );
         }
     }
@@ -625,14 +655,17 @@ function clickGamePage( index )
 			
             switchPlayer();
             //setTimeout( aiAnimation( getNowPlayer() ), 1000 );
-            aiTurn( ai, getNowPlayer() );
 
             setgOldHighlightIndex( getHighlightIndex() );
             setHighlightIndex( index );
 
             drawSingle( getHighlightIndex() );
+
+            aiTurn( ai, getNowPlayer() );
         }
     }
+
+
 
     // 點擊的是一個翻開的棋子，加上選定邊框
     if ( chessData.chessStates[index] == OPEN )
@@ -647,6 +680,7 @@ function clickGamePage( index )
     else if ( openChess( chessData, index ) )
     {
     	playClickSound();
+        drawSingle( index );
     	
         switchPlayer();
         aiTurn( ai, getNowPlayer() );

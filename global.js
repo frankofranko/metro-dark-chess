@@ -537,3 +537,7 @@ var gJumpProportion = 0; // 用於Chrome往後捲動頁面
 var gBackupMargin; // 之前位移位置
 
 
+var gTouchStartX = -1;
+var gTouchStartY = -1;
+
+
