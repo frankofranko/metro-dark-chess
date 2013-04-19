@@ -446,8 +446,8 @@ function setSize( w, h, page )
 
     var distanceOffset = 0; // 棋子間的間隔
 
-    var shorter = document.body.offsetWidth; // 較短的邊
-    var longer = document.body.offsetHeight;
+    var shorter = c.width = document.body.offsetWidth; // 較短的邊
+    var longer = c.height = document.body.offsetHeight;
 
     if ( shorter > longer )
     {
@@ -528,8 +528,8 @@ function setSize( w, h, page )
             heightCount = 4;
         }
 
-        c.width = width + chessEatenSize * 2;
-        c.height = height;
+        //c.width = width + chessEatenSize * 2;
+        //c.height = height;
 
         highlightOffset = width / 100; // 選定的邊框寬度
         chessSizeOffset = width / 50; // 棋子字體大小
@@ -547,6 +547,12 @@ function setSize( w, h, page )
             if ( chessEatenSize > maxChessEatenSize )
             {
                 chessEatenSize = maxChessEatenSize;
+            }
+            
+            if ( chessEatenSize * 2 + height > c.height )
+            {
+            	//width = height * 8 / 5;
+            	//height = width / 2;
             }
         }
         else
@@ -613,16 +619,19 @@ function setSize( w, h, page )
             heightCount = 2;
         }
 
-        c.width = width;
-        c.height = height + chessEatenSize * 2;
+        //c.width = width;
+        //c.height = height + chessEatenSize * 2;
 
         highlightOffset = height / 100; // 選定的邊框寬度
         chessSizeOffset = height / 50; // 棋子字體大小
     }
 
     chessWidth = width / widthCount; // 棋子高度
-    chessHeight = height / heightCount; // 棋子寬度
+    chessWidth -= chessWidth / 7
+	chessHeight = chessWidth;
+    //chessHeight = height / heightCount; // 棋子寬度
 
+/*
     // 棋盤和選色畫面的間隔比例較大, 其餘較小
     if ( widthCount * heightCount < INDEX_LENGTH )
     {
@@ -634,6 +643,7 @@ function setSize( w, h, page )
         chessWidth -= chessWidth / 7;
         chessHeight -= chessWidth / 7;
     }
+*/
 
     if ( chessWidth < chessHeight )
     {

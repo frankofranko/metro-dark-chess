@@ -413,18 +413,7 @@ function aiTurn( ai, camp )
 
             switchPlayer();
 
-            if ( gameIsOver() )
-            {
-                setGameLog( getNowPage() );
-
-                var winner = getCampName( gGameWinner );
-                printGame( winner + "獲勝!  遊戲結束!! " );
-                
-                gBackupMargin = document.body.style.margin; // 將之前的位移位置紀錄起來
-
-                showPage( GAME_OVER_PAGE );
-
-            }
+            checkGameOver();
 
         }
         else
@@ -453,6 +442,21 @@ function aiTurn( ai, camp )
 
     //redrawAll();
 
+}
+
+function checkGameOver()
+{
+	if ( gameIsOver() )
+    {
+        setGameLog( getNowPage() );
+
+        var winner = getCampName( gGameWinner );
+        printGame( winner + "獲勝!  遊戲結束!! " );
+                
+        gBackupMargin = document.body.style.margin; // 將之前的位移位置紀錄起來
+
+        showPage( GAME_OVER_PAGE );
+    }
 }
 
 // 
@@ -655,6 +659,8 @@ function clickGamePage( index )
 
     drawSingle( index );
     drawAllEatenChess();
+    
+    checkGameOver();
 }
 
 

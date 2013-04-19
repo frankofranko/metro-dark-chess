@@ -1349,9 +1349,9 @@ function drawSingleEatenChess( chess, camp, order )
 
 
 
-    if ( camp == BLACK )
+    if ( camp == gPlayerCamp )
     {
-        fontColor = chessBlackColor;
+        fontColor = camp == BLACK ? chessBlackColor : chessRedColor;
 
         if ( getOrientation() == LANDSCAPE )
         {
@@ -1374,8 +1374,7 @@ function drawSingleEatenChess( chess, camp, order )
     }
     else
     {
-        fontColor = chessRedColor;
-
+        fontColor = camp == BLACK ? chessBlackColor : chessRedColor;
 
         if ( getOrientation() == LANDSCAPE )
         {
