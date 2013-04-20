@@ -294,38 +294,6 @@ document.onmousedown = function( event )
     }
 }
 
-//滑鼠左鍵離開的事件 for ios
-document.ontouchmove = function( event )
-{
-    
-    try
-    {
-        if ( TOUCH_EVENT_ENABLE )
-        {
-            var touch = event.touches[0];
-            var x = touch.clientX + document.body.scrollLeft;
-            var y = touch.clientY + document.body.scrollTop;
-
-            if ( gTouchStartX > 0 && gTouchStartY > 0 )
-            { 
-                var differenceX = gTouchStartX > x ? gTouchStartX - x : x - gTouchStartX;
-
-                var differenceY = gTouchStartY > y ? gTouchStartY - y : y - gTouchStartY;
-
-                // 若有滑動動作，則跳出到開始畫面
-                if ( differenceX > width / 3 && differenceY < height / 10 )
-                {
-                    showPage( START_PAGE );
-                }
-            }
-        }
-
-    }
-    catch ( err )
-    {
-        errorMessage.innerHTML += "發生錯誤: " + err.stack + "<br>";
-    }
-}
 
 // 滑鼠左鍵按下的事件 for ios
 document.ontouchstart = function( event )
