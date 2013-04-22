@@ -529,7 +529,7 @@ function drawFunction( index )
     phyY += chessFontBaseSize - chessSizeOffset * 3;
     phyX += chessWidth / 2;
 
-    drawCenterText( FUNCTION_NAMES[index][gLanguageIndex], fontSize, frontColor, phyX, phyY, false );
+    drawCenterText( FUNCTION_NAMES[index][gLanguageIndex], fontSize / 5, frontColor, phyX, phyY, false );
 
     var logo = ""; // 開始頁面的各功能logo
 
@@ -1314,6 +1314,62 @@ function drawProcess( camp, tick )
 
 }
 
+function drawExitBlock()
+{
+    resetContext();
+    var eatenSize = chessEatenSize;
+    var fontSize;
+    var fontColor;
+    var phyX;
+    var phyY;
+    var blockWidth = eatenSize / 2;
+    
+    var order = 16;
+
+    fontColor = frontColor;
+
+    if ( getOrientation() == LANDSCAPE )
+    {
+        phyX = width - blockWidth * 1.1;
+        
+        if ( gDeviceName == WINDOWS_PHONE )
+        {
+            phyY = height * 0.07;
+        }
+        else
+        {
+            phyY = 0;
+        }
+    }
+    else
+    {
+        phyX = 0;
+        phyY = height - blockWidth;
+    }
+
+
+
+    ctx.beginPath();
+
+    ctx.fillStyle = frontChessColor;
+
+    ctx.rect( phyX, phyY, blockWidth, blockWidth );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    addRoundLine( frontChessColor );
+
+
+    // 再畫出字樣
+    var x = phyX + blockWidth / 2;
+    var y = phyY + blockWidth / 2;
+    fontSize = blockWidth - chessSizeOffset * 0;
+
+    drawCenterText( STR_GOBACK_LOGO[0], fontSize, fontColor, x, y, false );
+}
+
 // 繪製單個被吃的棋子
 function drawSingleEatenChess( chess, camp, order )
 {
@@ -1446,6 +1502,12 @@ function drawAllEatenChess()
     for ( var i = 0; i < redSize; i ++ )
     {
         drawSingleEatenChess( getChess( gEatenRedQueue[i], RED ), RED, i );
+    }
+    
+    // 畫出離開方塊
+    if ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE )
+    {
+        drawExitBlock();    
     }
 }
 
