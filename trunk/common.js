@@ -528,8 +528,8 @@ function setSize( w, h, page )
             heightCount = 4;
         }
 
-        //c.width = width + chessEatenSize * 2;
-        //c.height = height;
+        c.width = width * widthCount;
+        c.height = height * heightCount;
 
         highlightOffset = width / 100; // 選定的邊框寬度
         chessSizeOffset = width / 50; // 棋子字體大小
@@ -619,8 +619,8 @@ function setSize( w, h, page )
             heightCount = 2;
         }
 
-        //c.width = width;
-        //c.height = height + chessEatenSize * 2;
+        c.width = width;
+        c.height = height + chessEatenSize * 2;
 
         highlightOffset = height / 100; // 選定的邊框寬度
         chessSizeOffset = height / 50; // 棋子字體大小

@@ -186,7 +186,7 @@ function jumpMove( page, index )
 {
     var backIndex = 0; // 回上一頁的index
     var indexLength = 0; // 共有幾個頁面
-    var offset = gJumpProportion / 50; // 共平移了幾次
+    var offset = gJumpProportion / 20; // 共平移了幾次
     
     if ( page == ABOUT_PAGE )
     {    
@@ -209,14 +209,15 @@ function jumpMove( page, index )
     {
         var relativeIndex = index + offset;
     
-        if ( -offset == indexLength-2 )   // 已經滾到最後面
+        if ( offset < -1 )   // 已經滾到最後面
         {
             document.body.style.margin = "0% 0% 0% 0%";
             showPage( START_PAGE );
         }
         else
         {
-            gJumpProportion -= 50;
+            //alert( offset );
+            gJumpProportion -= 20;
         
             if ( getOrientation() == PORTRAIT ) // 直立
             {
@@ -271,7 +272,27 @@ function mousedown( pageX, pageY )
         //printDebug( "游標: " + pageX + " , " + pageY + "&nbsp;&nbsp;&nbsp; 位置: " + posX + " , " + posY + "&nbsp;&nbsp;&nbsp; 棋子: " + chesses[getIndex( posX, posY )] );
         
         click( posX, posY );
+        
+        
+        if ( ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE ) && isGamePage( getNowPage() ) )
+        {
+            if ( getOrientation() == LANDSCAPE ) // 水平
+            {
+                if ( width - pageX < chessEatenSize && pageY < chessEatenSize )
+                {
+                    showPage( START_PAGE );
+                }
+            }
+            else // 直立
+            {
+                if ( height - pageY < chessEatenSize && pageX < chessEatenSize )
+                {
+                    showPage( START_PAGE );
+                }
+            }
+        }
     }
+    
     
 }
 
@@ -927,7 +948,11 @@ function showPage( page )
                         deviceHeight = gInitHeight;
                         deviceWidth = gInitWidth;
                     }
-                    
+                }
+                else if ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE )
+                {
+                    var tempHeight = ( deviceWidth / 2.7 ) * 4;
+                    deviceHeight = tempHeight < deviceHeight ? tempHeight : deviceHeight;
                 }
 
                 w = deviceHeight / 2;
@@ -965,7 +990,7 @@ function showPage( page )
 
                 setSize( w, h, page );
             }
-            else // 橫放
+            else // 橫放 , deviceHeight < deviceWidth
             {
                 if ( gDeviceName == WINDOWS_PHONE )
                 {
@@ -976,6 +1001,11 @@ function showPage( page )
                 else if ( gDeviceName == IOS )
                 {
                     document.body.style.margin = "5% 0% 0% 0%"; // 棋盤往下移
+                }
+                else if ( gDeviceName == CHROME || gDeviceName == SIM_DEVICE )
+                {
+                    var tempWidth = ( deviceHeight / 2.7 ) * 4;
+                    deviceWidth = tempWidth < deviceWidth ? tempWidth : deviceWidth;
                 }
 
                 w = deviceWidth / 2;
