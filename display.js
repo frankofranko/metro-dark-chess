@@ -529,7 +529,7 @@ function drawFunction( index )
     phyY += chessFontBaseSize - chessSizeOffset * 3;
     phyX += chessWidth / 2;
 
-    drawCenterText( FUNCTION_NAMES[index][gLanguageIndex], fontSize / 5, frontColor, phyX, phyY, false );
+    drawCenterText( FUNCTION_NAMES[index][gLanguageIndex], fontSize, frontColor, phyX, phyY, false );
 
     var logo = ""; // 開始頁面的各功能logo
 
