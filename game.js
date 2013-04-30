@@ -234,6 +234,7 @@ function jumpMove( page, index )
     {
         if ( index == backIndex )   // 已經滾到最後面
         {
+            //alert( "XX" );
             showPage( START_PAGE );
         }
     }
