@@ -140,11 +140,11 @@ var STR_ABOUT_SUPPORT_DETAIL = new Array(
     "スポンサーシップ",
     "후원에 대하여" );
 var STR_ABOUT_AUTHOR_DETAIL = new Array(
-    "籍貫台灣彰化，菜鳥工程師一枚，所學尚淺，歡迎來信交流與指教。　信箱: abc9070410@gmail.com",
-    "籍贯台湾彰化，菜鸟工程师一枚，所学尚浅，欢迎来信交流与指教。　信箱: abc9070410@gmail.com",
-    "Hometown Changhua, Taiwan, rookie engineers a learned yet, please email exchanges with advice. 　e-mail:abc9070410@gmail.com",
-    "故郷彰化、台湾、新人エンジニアはまだ習って、アドバイスされた電子メールの交換をしてください. 　e-mail:abc9070410@gmail.com",
-    "고향 Changhua, 대만, 신참 엔지니어가 아직 배우고, 조언 이메일 교류를하시기 바랍니다. 　e-mail:abc9070410@gmail.com" );
+    "作者：surveyorK　信箱: abc9070410@gmail.com",
+    "作者：surveyorK　信箱: abc9070410@gmail.com",
+    "Author:surveyorK　e-mail:abc9070410@gmail.com",
+    "著者:surveyorK 　e-mail:abc9070410@gmail.com",
+    "저자:surveyorK 　e-mail:abc9070410@gmail.com" );
 
 
 var STR_GENERAL_RULE_DETAIL = new Array(
